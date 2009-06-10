@@ -1,18 +1,19 @@
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
 import com.sun.opengl.util.Animator;
 
 import game.Main;
+import game.event.Key;
+
 
 public class Game extends Frame
 {
     public Game()
     {
-        super("Base game");
+        super("seekThemUp - v0.1");
 
         this.addWindowListener(new WindowAdapter()
         {
@@ -22,16 +23,11 @@ public class Game extends Frame
             }
         });
 
+        // Create a new window
         setSize(640, 480);
         setLocation(320, 160);
         setVisible(true);
         setupJOGL();
-    }
-
-    public static void main(String[] args)
-    {
-        Game game = new Game();
-        game.setVisible(true);
     }
 
     private void setupJOGL()
@@ -45,11 +41,18 @@ public class Game extends Frame
         Animator anim = new Animator(canvas);
         anim.start();
 
-        Main app = new Main();
-        canvas.addGLEventListener(app);
-        canvas.addKeyListener(app);
+        // Add Listeners
+        canvas.addGLEventListener(new game.Main());
+        canvas.addKeyListener(new game.event.Key());
 
         add(canvas, BorderLayout.CENTER);
+    }
+
+    public static void main(String[] args)
+    {
+        // Create Game
+        Game game = new Game();
+        game.setVisible(true);
     }
 }
 

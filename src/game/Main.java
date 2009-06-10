@@ -3,19 +3,16 @@ package game;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import game.object.Player;
 
 
-public class Main implements GLEventListener, KeyListener
+public class Main implements GLEventListener
 {
-    protected Player player;
+    protected game.object.Player player;
 
     public Main()
     {
-        this.player = new Player();
+        this.player = new game.object.Player();
     }
 
     public void init(GLAutoDrawable drawable)
@@ -27,7 +24,6 @@ public class Main implements GLEventListener, KeyListener
         gl.glClearDepth(1.0f);                                      //Set up depth buffer
         gl.glEnable(GL.GL_DEPTH_TEST);                              // Enables Depth Testing
         gl.glDepthFunc(GL.GL_LEQUAL);                               // The Type Of Depth Testing To Do
-
         gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST); //Adds tiny amount of computation, makes things look nicer
     }
 
@@ -58,8 +54,10 @@ public class Main implements GLEventListener, KeyListener
 
     public void display(GLAutoDrawable drawable)
     {
+        // Compute
         this.player.compute();
 
+        // Draw
         GL gl = drawable.getGL();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -68,19 +66,6 @@ public class Main implements GLEventListener, KeyListener
         this.player.draw(gl);
 
         gl.glFlush();
-    }
-
-    public void keyTyped(KeyEvent e)
-    {
-    }
-
-    public void keyPressed(KeyEvent e)
-    {
-        System.out.println("keyPressed: " + e.getKeyCode());
-    }
-
-    public void keyReleased(KeyEvent e)
-    {
     }
 }
 

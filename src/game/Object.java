@@ -1,7 +1,7 @@
 package game;
 
 import javax.media.opengl.*;
-import javax.media.opengl.glu.*;
+
 
 public class Object
 {
@@ -10,12 +10,6 @@ public class Object
 
     public Object()
     {
-    }
-
-    public void setPosition(float posX, float posY)
-    {
-        this.x = posX;
-        this.y = posY;
     }
 
     public void goToPosition(GL gl)

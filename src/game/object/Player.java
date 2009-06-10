@@ -3,6 +3,7 @@ package game.object;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 
+import game.Observer;
 import game.Object;
 import game.Shape;
 
@@ -13,8 +14,13 @@ public class Player extends game.Object
     public Player()
     {
         this.shape = new Shape();
-        this.setPosition(0.0f, 0.0f);
+
+//        game.Observer.getInstance().observe("keyPressed", this.handle_keyPressed);
     }
+
+//    public void handle_keyPressed(key)
+//    {
+//    }
 
     public void compute()
     {
