@@ -1,2 +1,3 @@
 #!/bin/bash
-java -cp bin Game
+./game/main.rb
+
