@@ -51,6 +51,7 @@ class MyWindow < Gosu::Window
     @enemyList.each{|item|
       item.update
     }
+    @quadtree.reset
     @quadtree.update(@enemyList)
     @quadtree.hit(@player).each{|item|
       $total_colision += 1

@@ -3,20 +3,22 @@ class Quadtree
   attr_reader :is_leaf
 
   def initialize(window)
+    reset
     @window = window
-    @itemList = []
     @top = 0
     @right = 0
     @bottom = 0
     @left = 0
     @center_x = 0
     @center_y = 0
+  end
+
+  def reset
+    @itemList = []
     @is_leaf = true
   end
 
   def update(items)
-    return if items.length == 0
-
     $total_quad += 1
 
     # compute top limit of this items rect
@@ -61,7 +63,7 @@ class Quadtree
       # If it overlaps all 4 quadrants then insert it at the current
       # depth, otherwise append it to a list to be inserted under every
       # quadrant that it overlaps.
-      if in_nw and in_ne and in_se and in_sw:
+      if in_nw and in_ne and in_se and in_sw
           @itemList += [item]
       else
           nw_items += [item] if in_nw
@@ -110,17 +112,11 @@ class Quadtree
     # grab all items at this level that overlaps the rect
     hits = @itemList.select{|item| overlaps?(rect, item)}
 
-    # recursively check for lower quadrans
-    unless @nw_quad.is_leaf
+    unless @is_leaf
+      # recursively check for lower quadrans
       hits += @nw_quad.hit(rect) if rect.left <= @center_x and rect.top <= @center_y
-    end
-    unless @sw_quad.is_leaf
       hits += @sw_quad.hit(rect) if rect.left <= @center_x and rect.top >= @center_y
-    end
-    unless @ne_quad.is_leaf
       hits += @ne_quad.hit(rect) if rect.left >= @center_x and rect.top <= @center_y
-    end
-    unless @se_quad.is_leaf
       hits += @se_quad.hit(rect) if rect.left >= @center_x and rect.top >= @center_y
     end
 
