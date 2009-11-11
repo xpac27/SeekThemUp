@@ -4,9 +4,10 @@ class Enemy
     @sprite = Gosu::Image.new(window, 'game/media/enemy.png')
     @window = window
     @speed = 0.5
+    @size = 32
     @direction = 0
-    @x = rand(window.width - 32) + 16
-    @y = rand(window.height - 32) + 16
+    @x = rand(window.width - @size) + @size/2
+    @y = rand(window.height - @size) + @size/2
   end
 
   def update
@@ -25,16 +26,21 @@ class Enemy
   end
 
   def draw
-    @sprite.draw(@x - 16, @y - 16, 1)
+    @sprite.draw(@x - @size/2, @y - @size/2, 2)
   end
 
   def translate(x, y)
     nx = @x + x * @speed
     ny = @y + y * @speed
 
-    @x = nx if nx < @window.width - 16 and nx > 16
-    @y = ny if ny < @window.height - 16 and ny > 16
+    @x = nx if nx < @window.width - @size/2 and nx > @size/2
+    @y = ny if ny < @window.height - @size/2 and ny > @size/2
   end
+
+  def top;    @x - @size/2; end
+  def left;   @y - @size/2; end
+  def bottom; @x + @size/2; end
+  def right;  @y + @size/2; end
 
 end
 

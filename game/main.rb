@@ -4,9 +4,12 @@ require 'rubygems'
 require 'gosu'
 require 'game/player'
 require 'game/enemy'
+require 'game/quadtree'
 
 
 class MyWindow < Gosu::Window
+
+  $quad_total = 0
 
   def initialize
     super(640, 480, false)
@@ -17,6 +20,7 @@ class MyWindow < Gosu::Window
     10.times {
       @enemyList += [Enemy.new(self)]
     }
+    @quadtree = Quadtree.new(self)
   end
 
   def update
@@ -33,13 +37,17 @@ class MyWindow < Gosu::Window
       @player.translate(-1, 0)
     end
 
+    $quad_total = 0
+
     @player.update
     @enemyList.each{|item|
       item.update
     }
+    @quadtree.update(@enemyList)
   end
 
   def draw
+    @quadtree.draw
     @player.draw
     @enemyList.each{|item|
       item.draw
@@ -47,7 +55,9 @@ class MyWindow < Gosu::Window
   end
 
   def button_down(id)
-    if id == Gosu::Button::KbEscape
+    if id == 12
+      puts $quad_total
+    elsif id == Gosu::Button::KbEscape
       close
     end
   end
