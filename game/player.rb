@@ -1,7 +1,6 @@
 class Player
 
   def initialize(window)
-    @sprite = Gosu::Image.new(window, 'game/media/player.png')
     @window = window
     @speed = 2
     @size = 32
@@ -13,7 +12,7 @@ class Player
   end
 
   def draw
-    @sprite.draw(@x - @size/2, @y - @size/2, 2)
+    @window.draw_quad(top, left, 0xAAFF0000, top, right, 0xAAFF0000, bottom, left, 0xAAFF0000, bottom, right, 0xAAFF0000)
   end
 
   def translate(x, y)

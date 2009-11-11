@@ -1,16 +1,19 @@
 class Enemy
 
+  attr_accessor :overlaps
+
   def initialize(window)
-    @sprite = Gosu::Image.new(window, 'game/media/enemy.png')
     @window = window
-    @speed = 0.5
-    @size = 32
+    @speed = 0.4
+    @size = 16
     @direction = 0
+    @overlaps = false
     @x = rand(window.width - @size) + @size/2
     @y = rand(window.height - @size) + @size/2
   end
 
   def update
+    @overlaps = false
     @direction = rand(7) if rand(80) == 1
 
     case @direction
@@ -26,7 +29,11 @@ class Enemy
   end
 
   def draw
-    @sprite.draw(@x - @size/2, @y - @size/2, 2)
+    if @overlaps
+      @window.draw_quad(top, left, 0xAAFF0000, top, right, 0xAAFF0000, bottom, left, 0xAAFF0000, bottom, right, 0xAAFF0000)
+    else
+      @window.draw_quad(top, left, 0xAAFFFFFF, top, right, 0xAAFFFFFF, bottom, left, 0xAAFFFFFF, bottom, right, 0xAAFFFFFF)
+    end
   end
 
   def translate(x, y)

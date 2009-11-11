@@ -1,5 +1,7 @@
 class Quadtree
 
+  attr_reader :is_leaf
+
   def initialize(window)
     @window = window
     @itemList = []
@@ -13,31 +15,36 @@ class Quadtree
   end
 
   def update(items)
-    $quad_total += 1
-
     return if items.length == 0
 
-    @is_leaf = false
+    $total_quad += 1
 
-    # compute top limit of this items area
+    # compute top limit of this items rect
     @top = items[0].top
     items.each {|item| @top = item.top if item.top < @top}
 
-    # compute left limit of this items area
+    # compute left limit of this items rect
     @left = items[0].left
     items.each {|item| @left = item.left if item.left < @left}
 
-    # compute bottom limit of this items area
+    # compute bottom limit of this items rect
     @bottom = items[0].bottom
     items.each {|item| @bottom = item.bottom if item.bottom > @bottom}
 
-    # compute right limit of this items area
+    # compute right limit of this items rect
     @right = items[0].right
     items.each {|item| @right = item.right if item.right > @right}
 
-    # compute the center of this area
+    # compute the center of this rect
     @center_x = (@left + @right) / 2
     @center_y = (@top + @bottom) / 2
+
+    if items.length == 1
+      @itemList = items
+      return
+    end
+
+    @is_leaf = false
 
     # make the list of north/west, north/est, sud/est, sud/west items
     nw_items = []
@@ -78,20 +85,46 @@ class Quadtree
   end
 
   def draw
-    @window.draw_line(@top, @center_x, 0xFF336633, @bottom, @center_x, 0xFF336633, 9)
-    @window.draw_line(@center_y, @left, 0xFF336633, @center_y, @right, 0xFF336633, 9)
-
     @window.draw_line(@top, @left, 0xFFAAFFAA, @top, @right, 0xFFAAFFAA, 9)
     @window.draw_line(@bottom, @left, 0xFFAAFFAA, @bottom, @right, 0xFFAAFFAA, 9)
     @window.draw_line(@top, @left, 0xFFAAFFAA, @bottom, @left, 0xFFAAFFAA, 9)
     @window.draw_line(@top, @right, 0xFFAAFFAA, @bottom, @right, 0xFFAAFFAA, 9)
 
     unless @is_leaf
+      @window.draw_line(@top, @center_x, 0xFF003300, @bottom, @center_x, 0xFF003300, 9)
+      @window.draw_line(@center_y, @left, 0xFF003300, @center_y, @right, 0xFF003300, 9)
+
       @nw_quad.draw
       @ne_quad.draw
       @se_quad.draw
       @sw_quad.draw
     end
+  end
+
+  def overlaps?(rect, item)
+    $total_test += 1
+    rect.right >= item.left and rect.left <= item.right and rect.bottom >= item.top and rect.top <= item.bottom
+  end
+
+  def hit(rect)
+    # grab all items at this level that overlaps the rect
+    hits = @itemList.select{|item| overlaps?(rect, item)}
+
+    # recursively check for lower quadrans
+    unless @nw_quad.is_leaf
+      hits += @nw_quad.hit(rect) if rect.left <= @center_x and rect.top <= @center_y
+    end
+    unless @sw_quad.is_leaf
+      hits += @sw_quad.hit(rect) if rect.left <= @center_x and rect.top >= @center_y
+    end
+    unless @ne_quad.is_leaf
+      hits += @ne_quad.hit(rect) if rect.left >= @center_x and rect.top <= @center_y
+    end
+    unless @se_quad.is_leaf
+      hits += @se_quad.hit(rect) if rect.left >= @center_x and rect.top >= @center_y
+    end
+
+    hits
   end
 
 end

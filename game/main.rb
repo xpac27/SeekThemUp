@@ -9,15 +9,21 @@ require 'game/quadtree'
 
 class MyWindow < Gosu::Window
 
-  $quad_total = 0
+  $total_quad = 0
+  $total_test = 0
+  $total_colision = 0
 
   def initialize
     super(640, 480, false)
     self.caption = 'seekThemUp'
 
+    @text_quad = Gosu::Font.new(self, Gosu::default_font_name, 18)
+    @text_test = Gosu::Font.new(self, Gosu::default_font_name, 18)
+    @text_colision = Gosu::Font.new(self, Gosu::default_font_name, 18)
+
     @player = Player.new(self)
     @enemyList = []
-    10.times {
+    8.times {
       @enemyList += [Enemy.new(self)]
     }
     @quadtree = Quadtree.new(self)
@@ -37,13 +43,19 @@ class MyWindow < Gosu::Window
       @player.translate(-1, 0)
     end
 
-    $quad_total = 0
+    $total_quad = 0
+    $total_test = 0
+    $total_colision = 0
 
     @player.update
     @enemyList.each{|item|
       item.update
     }
     @quadtree.update(@enemyList)
+    @quadtree.hit(@player).each{|item|
+      $total_colision += 1
+      item.overlaps = true
+    }
   end
 
   def draw
@@ -52,12 +64,14 @@ class MyWindow < Gosu::Window
     @enemyList.each{|item|
       item.draw
     }
+
+    @text_quad.draw('quad: ' + $total_quad.to_s, 10, 10, 9, 1.0, 1.0, 0xFFFFFFFF)
+    @text_test.draw('test: ' + $total_test.to_s, 10, 30, 9, 1.0, 1.0, 0xFFFFFFFF)
+    @text_colision.draw('colision: ' + $total_colision.to_s, 10, 50, 9, 1.0, 1.0, 0xFFFFFFFF)
   end
 
   def button_down(id)
-    if id == 12
-      puts $quad_total
-    elsif id == Gosu::Button::KbEscape
+    if id == Gosu::Button::KbEscape
       close
     end
   end
