@@ -1,7 +1,5 @@
 class Quadtree
 
-  attr_reader :is_leaf
-
   def initialize(window)
     @window = window
     @is_leaf = true
@@ -47,8 +45,6 @@ class Quadtree
         end
       end
 
-#      puts nw_items.length.to_s + ' ' + ne_items.length.to_s + ' ' + se_items.length.to_s + ' ' + sw_items.length.to_s
-
       # Create the sub-quadrants
       @nw_quad = Quadtree.new(@window)
       @ne_quad = Quadtree.new(@window)
@@ -74,8 +70,8 @@ class Quadtree
     @area.outline(0xFFAAFFAA) if @area
 
     unless @is_leaf
-      @window.draw_line(@area.top, @area.x, 0xFF003300, @area.bottom, @area.x, 0xFF003300, 9)
-      @window.draw_line(@area.y, @area.left, 0xFF003300, @area.y, @area.right, 0xFF003300, 9)
+      @window.draw_line(@area.x, @area.top, 0xFF003300, @area.x, @area.bottom, 0xFF003300, 9)
+      @window.draw_line(@area.left, @area.y, 0xFF003300, @area.right, @area.y, 0xFF003300, 9)
 
       @nw_quad.draw
       @ne_quad.draw

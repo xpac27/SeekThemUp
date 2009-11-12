@@ -10,14 +10,14 @@ class Rect
   end
 
   def draw(color=0xFFFFFFFF)
-    @window.draw_quad(@top, @left, color, @top, @right, color, @bottom, @left, color, @bottom, @right, color)
+    @window.draw_quad(@left, @top, color, @right, @top, color, @left, @bottom, color, @right, @bottom, color)
   end
 
   def outline(color=0xFFFFFFFF)
-    @window.draw_line(@top, @left, color, @top, @right, color)
-    @window.draw_line(@bottom, @left, color, @bottom, @right, color)
-    @window.draw_line(@top, @left, color, @bottom, @left, color)
-    @window.draw_line(@top, @right, color, @bottom, @right, color)
+    @window.draw_line(@left, @top, color, @right, @top, color)
+    @window.draw_line(@left, @bottom, color, @right, @bottom, color)
+    @window.draw_line(@left, @top, color, @left, @bottom, color)
+    @window.draw_line(@right, @top, color, @right, @bottom, color)
   end
 
   def set_size(width, height)
@@ -41,14 +41,14 @@ class Rect
 
   def x=(value)
     @x = value
-    @left = @y - @alf_width
-    @right = @y + @alf_width
+    @left = @x - @alf_width
+    @right = @x + @alf_width
   end
 
   def y=(value)
     @y = value
-    @top = @x - @alf_height
-    @bottom = @x + @alf_height
+    @top = @y - @alf_height
+    @bottom = @y + @alf_height
   end
 
   def union!(rect)
