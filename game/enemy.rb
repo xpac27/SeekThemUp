@@ -7,7 +7,7 @@ class Enemy
     @x = rand(window.width - 16) + 16/2
     @y = rand(window.height - 16) + 16/2
     @box = Rect.new(@window, @x, @y, 16, 16)
-    @speed = 0.4
+    @speed = 0.8
     @direction = 0
     @overlaps = false
   end
@@ -41,8 +41,8 @@ class Enemy
     ny = @y + y * @speed
 
     # TODO: use box structure to do this test
-    @x = @box.x = nx if nx < @window.width - 16/2 and nx > 16/2
-    @y = @box.y = ny if ny < @window.height - 16/2 and ny > 16/2
+    @x = @box.x = nx if (nx < @window.width - 16/2 and nx > 16/2)
+    @y = @box.y = ny if (ny < @window.height - 16/2 and ny > 16/2)
   end
 
 end

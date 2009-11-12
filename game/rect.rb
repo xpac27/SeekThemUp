@@ -64,7 +64,7 @@ class Rect
 
   def overlaps?(rect)
     $total_test += 1
-    rect.right >= @left and rect.left <= @right and rect.bottom >= @top and rect.top <= @bottom
+    (rect.right >= @left and rect.left <= @right and rect.bottom >= @top and rect.top <= @bottom)
   end
 
   def nw_quadrant

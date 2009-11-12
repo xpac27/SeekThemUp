@@ -22,8 +22,8 @@ class Player
     ny = @y + y * @speed
 
     # TODO: use box structure to do this test
-    @x = @box.x = nx if nx < @window.width - 32/2 and nx > 32/2
-    @y = @box.y = ny if ny < @window.height - 32/2 and ny > 32/2
+    @x = @box.x = nx if (nx < @window.width - 32/2 and nx > 32/2)
+    @y = @box.y = ny if (ny < @window.height - 32/2 and ny > 32/2)
   end
 
 end

@@ -24,7 +24,7 @@ class MyWindow < Gosu::Window
 
     @player = Player.new(self)
     @enemyList = []
-    3.times {
+    8.times {
       @enemyList += [Enemy.new(self)]
     }
     @quadtree = Quadtree.new(self)

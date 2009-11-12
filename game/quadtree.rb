@@ -28,10 +28,10 @@ class Quadtree
       sw_items = []
       items.each do |item|
         # Which of the sub-quadrants does the item overlap?
-        in_nw = item.box.left <= @area.x and item.box.top <= @area.y
-        in_sw = item.box.left <= @area.x and item.box.bottom >= @area.y
-        in_ne = item.box.right >= @area.x and item.box.top <= @area.y
-        in_se = item.box.right >= @area.x and item.box.bottom >= @area.y
+        in_nw = (item.box.left <= @area.x and item.box.top <= @area.y)
+        in_ne = (item.box.right >= @area.x and item.box.top <= @area.y)
+        in_se = (item.box.right >= @area.x and item.box.bottom >= @area.y)
+        in_sw = (item.box.left <= @area.x and item.box.bottom >= @area.y)
 
         # If it overlaps all 4 quadrants then insert it at the current deth
         if in_nw and in_ne and in_se and in_sw
@@ -52,14 +52,10 @@ class Quadtree
       @sw_quad = Quadtree.new(@window)
 
       # fill them with their items if they have some
-#      @nw_quad.update(nw_items, @area.nw_quadrant) if nw_items.length != 0
-#      @ne_quad.update(ne_items, @area.ne_quadrant) if ne_items.length != 0
-#      @se_quad.update(se_items, @area.se_quadrant) if se_items.length != 0
-#      @sw_quad.update(sw_items, @area.sw_quadrant) if sw_items.length != 0
-      @nw_quad.update(nw_items) if nw_items.length != 0
-      @ne_quad.update(ne_items) if ne_items.length != 0
-      @se_quad.update(se_items) if se_items.length != 0
-      @sw_quad.update(sw_items) if sw_items.length != 0
+      @nw_quad.update(nw_items, @area.nw_quadrant) if nw_items.length != 0
+      @ne_quad.update(ne_items, @area.ne_quadrant) if ne_items.length != 0
+      @se_quad.update(se_items, @area.se_quadrant) if se_items.length != 0
+      @sw_quad.update(sw_items, @area.sw_quadrant) if sw_items.length != 0
     else
       @itemList = items
       @is_leaf = true
@@ -86,10 +82,10 @@ class Quadtree
 
     unless @is_leaf
       # recursively check for lower quadrans
-      hits += @nw_quad.hit(rect) if rect.left <= @area.x and rect.top <= @area.y
-      hits += @sw_quad.hit(rect) if rect.left <= @area.x and rect.top >= @area.y
-      hits += @ne_quad.hit(rect) if rect.left >= @area.x and rect.top <= @area.y
-      hits += @se_quad.hit(rect) if rect.left >= @area.x and rect.top >= @area.y
+      hits += @nw_quad.hit(rect) if (rect.left <= @area.x and rect.top <= @area.y)
+      hits += @sw_quad.hit(rect) if (rect.left <= @area.x and rect.top >= @area.y)
+      hits += @ne_quad.hit(rect) if (rect.left >= @area.x and rect.top <= @area.y)
+      hits += @se_quad.hit(rect) if (rect.left >= @area.x and rect.top >= @area.y)
     end
 
     hits
