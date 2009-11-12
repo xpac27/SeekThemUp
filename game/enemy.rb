@@ -1,15 +1,15 @@
 class Enemy
 
-  attr_accessor :overlaps
+  attr_accessor :overlaps, :box
 
   def initialize(window)
     @window = window
+    @x = rand(window.width - 16) + 16/2
+    @y = rand(window.height - 16) + 16/2
+    @box = Rect.new(@window, @x, @y, 16, 16)
     @speed = 0.4
-    @size = 16
     @direction = 0
     @overlaps = false
-    @x = rand(window.width - @size) + @size/2
-    @y = rand(window.height - @size) + @size/2
   end
 
   def update
@@ -30,9 +30,9 @@ class Enemy
 
   def draw
     if @overlaps
-      @window.draw_quad(top, left, 0xAAFF0000, top, right, 0xAAFF0000, bottom, left, 0xAAFF0000, bottom, right, 0xAAFF0000)
+      @box.draw(0xAAFF0000)
     else
-      @window.draw_quad(top, left, 0xAAFFFFFF, top, right, 0xAAFFFFFF, bottom, left, 0xAAFFFFFF, bottom, right, 0xAAFFFFFF)
+      @box.draw(0xAAFFFFFF)
     end
   end
 
@@ -40,14 +40,10 @@ class Enemy
     nx = @x + x * @speed
     ny = @y + y * @speed
 
-    @x = nx if nx < @window.width - @size/2 and nx > @size/2
-    @y = ny if ny < @window.height - @size/2 and ny > @size/2
+    # TODO: use box structure to do this test
+    @x = @box.x = nx if nx < @window.width - 16/2 and nx > 16/2
+    @y = @box.y = ny if ny < @window.height - 16/2 and ny > 16/2
   end
-
-  def top;    @x - @size/2; end
-  def left;   @y - @size/2; end
-  def bottom; @x + @size/2; end
-  def right;  @y + @size/2; end
 
 end
 

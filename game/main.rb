@@ -5,6 +5,7 @@ require 'gosu'
 require 'game/player'
 require 'game/enemy'
 require 'game/quadtree'
+require 'game/rect'
 
 
 class MyWindow < Gosu::Window
@@ -23,7 +24,7 @@ class MyWindow < Gosu::Window
 
     @player = Player.new(self)
     @enemyList = []
-    8.times {
+    3.times {
       @enemyList += [Enemy.new(self)]
     }
     @quadtree = Quadtree.new(self)
@@ -51,9 +52,8 @@ class MyWindow < Gosu::Window
     @enemyList.each{|item|
       item.update
     }
-    @quadtree.reset
     @quadtree.update(@enemyList)
-    @quadtree.hit(@player).each{|item|
+    @quadtree.hit(@player.box).each{|item|
       $total_colision += 1
       item.overlaps = true
     }
