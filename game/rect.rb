@@ -14,10 +14,10 @@ class Rect
   end
 
   def outline(color=0xFFFFFFFF)
-    @window.draw_line(@left, @top, color, @right, @top, color)
-    @window.draw_line(@left, @bottom, color, @right, @bottom, color)
-    @window.draw_line(@left, @top, color, @left, @bottom, color)
-    @window.draw_line(@right, @top, color, @right, @bottom, color)
+    @window.draw_line(@left, @top, color, @right, @top, color, 8)
+    @window.draw_line(@left, @bottom, color, @right, @bottom, color, 8)
+    @window.draw_line(@left, @top, color, @left, @bottom, color, 8)
+    @window.draw_line(@right, @top, color, @right, @bottom, color, 8)
   end
 
   def set_size(width, height)
@@ -63,7 +63,7 @@ class Rect
   end
 
   def overlaps?(rect)
-    $total_test += 1
+    Debug::count('test')
     (rect.right >= @left and rect.left <= @right and rect.bottom >= @top and rect.top <= @bottom)
   end
 

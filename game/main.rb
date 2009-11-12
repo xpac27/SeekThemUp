@@ -6,25 +6,21 @@ require 'game/player'
 require 'game/enemy'
 require 'game/quadtree'
 require 'game/rect'
+require 'game/fps'
+require 'game/debug'
 
 
 class MyWindow < Gosu::Window
-
-  $total_quad = 0
-  $total_test = 0
-  $total_colision = 0
 
   def initialize
     super(640, 480, false)
     self.caption = 'seekThemUp'
 
-    @text_quad = Gosu::Font.new(self, Gosu::default_font_name, 18)
-    @text_test = Gosu::Font.new(self, Gosu::default_font_name, 18)
-    @text_colision = Gosu::Font.new(self, Gosu::default_font_name, 18)
-
+    @fps = Fps.new(self, :periodic)
+    @debug = Debug.new(self, ['quad', 'test', 'colision'])
     @player = Player.new(self)
     @enemyList = []
-    8.times {
+    10.times {
       @enemyList += [Enemy.new(self)]
     }
     @quadtree = Quadtree.new(self)
@@ -44,19 +40,34 @@ class MyWindow < Gosu::Window
       @player.translate(-1, 0)
     end
 
-    $total_quad = 0
-    $total_test = 0
-    $total_colision = 0
+    @debug.update
 
     @player.update
+
     @enemyList.each{|item|
       item.update
     }
-    @quadtree.update(@enemyList)
-    @quadtree.hit(@player.box).each{|item|
-      $total_colision += 1
-      item.overlaps = true
-    }
+
+    @quadtree.update(@enemyList + [@player])
+
+    # check everie item against each other
+    @quadtree.check_colision
+
+#    # check player against enemies
+#    @quadtree.hit(@player.box).each{|item|
+#      Debug::count('colision')
+#      item.overlaps = true
+#      item.colide(@player.box)
+#    }
+#
+#    # check enemies against each other
+#    @enemyList.each{|enemy|
+#      @quadtree.hit(enemy.box).each{|item|
+#      Debug::count('colision')
+#        item.overlaps = true
+#        item.colide(enemy.box)
+#      }
+#    }
   end
 
   def draw
@@ -65,10 +76,8 @@ class MyWindow < Gosu::Window
     @enemyList.each{|item|
       item.draw
     }
-
-    @text_quad.draw('quad: ' + $total_quad.to_s, 10, 10, 9, 1.0, 1.0, 0xFFFFFFFF)
-    @text_test.draw('test: ' + $total_test.to_s, 10, 30, 9, 1.0, 1.0, 0xFFFFFFFF)
-    @text_colision.draw('colision: ' + $total_colision.to_s, 10, 50, 9, 1.0, 1.0, 0xFFFFFFFF)
+    @fps.draw
+    @debug.draw
   end
 
   def button_down(id)

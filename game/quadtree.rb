@@ -6,9 +6,10 @@ class Quadtree
     @itemList = []
   end
 
-  def update(items, area=nil)
-    $total_quad += 1
+  def update(items, area=nil, depth=0)
+    Debug::count('quad')
 
+    @depth = depth
     @itemList = []
 
     if area
@@ -18,7 +19,7 @@ class Quadtree
       items.each {|item| @area.union!(item.box)}
     end
 
-    if items.length > 1
+    if items.length > 1 and @depth <= 3
       @is_leaf = false
 
       # make the list of north/west, north/est, sud/est, sud/west items
@@ -52,10 +53,10 @@ class Quadtree
       @sw_quad = Quadtree.new(@window)
 
       # fill them with their items if they have some
-      @nw_quad.update(nw_items, @area.nw_quadrant) if nw_items.length != 0
-      @ne_quad.update(ne_items, @area.ne_quadrant) if ne_items.length != 0
-      @se_quad.update(se_items, @area.se_quadrant) if se_items.length != 0
-      @sw_quad.update(sw_items, @area.sw_quadrant) if sw_items.length != 0
+      @nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1) if nw_items.length != 0
+      @ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1) if ne_items.length != 0
+      @se_quad.update(se_items, @area.se_quadrant, @depth + 1) if se_items.length != 0
+      @sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1) if sw_items.length != 0
     else
       @itemList = items
       @is_leaf = true
@@ -63,11 +64,11 @@ class Quadtree
   end
 
   def draw
-    @area.outline(0xFFAAFFAA) if @area
+    @area.outline(0xFFAAFFAA) if @depth == 0
 
     unless @is_leaf
-      @window.draw_line(@area.x, @area.top, 0xFF003300, @area.x, @area.bottom, 0xFF003300, 9)
-      @window.draw_line(@area.left, @area.y, 0xFF003300, @area.right, @area.y, 0xFF003300, 9)
+      @window.draw_line(@area.x, @area.top, 0xFF003300, @area.x, @area.bottom, 0xFF003300, 7)
+      @window.draw_line(@area.left, @area.y, 0xFF003300, @area.right, @area.y, 0xFF003300, 7)
 
       @nw_quad.draw
       @ne_quad.draw
@@ -78,7 +79,7 @@ class Quadtree
 
   def hit(rect)
     # grab all items at this level that overlaps the rect
-    hits = @itemList.select{|item| item.box.overlaps?(rect)}
+    hits = @itemList.select{|item| (item.box != rect and item.box.overlaps?(rect))}
 
     unless @is_leaf
       # recursively check for lower quadrans
@@ -89,6 +90,25 @@ class Quadtree
     end
 
     hits
+  end
+
+  def check_colision
+    @itemList.each_index{|i|
+      @itemList[i + 1, @itemList.length].each{|item|
+        if @itemList[i].box.overlaps?(item.box)
+          @itemList[i].overlaps = true
+          item.overlaps = true
+          Debug::count('colision')
+        end
+      }
+    }
+
+    unless @is_leaf
+      @nw_quad.check_colision
+      @ne_quad.check_colision
+      @se_quad.check_colision
+      @sw_quad.check_colision
+    end
   end
 
 end

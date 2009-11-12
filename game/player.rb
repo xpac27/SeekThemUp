@@ -1,6 +1,7 @@
 class Player
 
   attr_reader :box
+  attr_writer :overlaps
 
   def initialize(window)
     @window = window
@@ -11,10 +12,15 @@ class Player
   end
 
   def update
+    @overlaps = false
   end
 
   def draw
-    @box.draw(0xAAFF0000)
+    if @overlaps
+      @box.draw(0xAAFF0000)
+    else
+      @box.draw(0xAA00FF00)
+    end
   end
 
   def translate(x, y)
