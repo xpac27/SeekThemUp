@@ -84,10 +84,12 @@ class Quadtree
     unless @is_leaf
       # recursively check for lower quadrans
       hits += @nw_quad.hit(rect) if (rect.left <= @area.x and rect.top <= @area.y)
-      hits += @sw_quad.hit(rect) if (rect.left <= @area.x and rect.top >= @area.y)
-      hits += @ne_quad.hit(rect) if (rect.left >= @area.x and rect.top <= @area.y)
-      hits += @se_quad.hit(rect) if (rect.left >= @area.x and rect.top >= @area.y)
+      hits += @sw_quad.hit(rect) if (rect.left <= @area.x and rect.bottom >= @area.y)
+      hits += @ne_quad.hit(rect) if (rect.right >= @area.x and rect.top <= @area.y)
+      hits += @se_quad.hit(rect) if (rect.right >= @area.x and rect.bottom >= @area.y)
     end
+
+    @area.draw(0x11FFFFFF) if @area
 
     hits
   end
@@ -96,9 +98,9 @@ class Quadtree
     @itemList.each_index{|i|
       @itemList[i + 1, @itemList.length].each{|item|
         if @itemList[i].box.overlaps?(item.box)
+          Debug::count('colision')
           @itemList[i].overlaps = true
           item.overlaps = true
-          Debug::count('colision')
         end
       }
     }
