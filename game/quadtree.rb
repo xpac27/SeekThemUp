@@ -64,7 +64,7 @@ class Quadtree
   end
 
   def draw
-    @area.outline(0xFFAAFFAA) if @depth == 0
+#    @area.outline(0xFFAAFFAA) if @depth == 0
 
     unless @is_leaf
       @window.draw_line(@area.x, @area.top, 0xFF003300, @area.x, @area.bottom, 0xFF003300, 7)

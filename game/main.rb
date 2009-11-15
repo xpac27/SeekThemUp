@@ -48,7 +48,7 @@ class MyWindow < Gosu::Window
       item.update
     }
 
-    @quadtree.update(@enemyList + [@player])
+    @quadtree.update(@enemyList + [@player], Rect.new(self, self.width/2, self.height/2, self.width, self.height))
 
     # check everie item against each other
     @quadtree.check_colision
