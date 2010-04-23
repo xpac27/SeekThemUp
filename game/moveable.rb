@@ -10,8 +10,8 @@ class Moveable
     @y            = y
 		@size         = s
     @speed        = 4
-    @acceleration = 0.2
-    @friction     = 0.03
+    @acceleration = 0.4
+    @friction     = 0.1
     @velocity     = [0,0]
     @box          = Rect.new(@window, @x, @y, s, s)
   end
@@ -28,7 +28,7 @@ class Moveable
   end
 
   def draw
-		@box.draw(0xCCCCCC00)
+		@box.draw(0x00CCCCCC)
   end
 
   def translate(x, y)

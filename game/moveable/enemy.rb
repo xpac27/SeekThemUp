@@ -27,9 +27,9 @@ class Enemy < Moveable
 
   def draw
     if @overlaps
-      @box.draw(0xAAFF0000)
+      @box.draw(0xFFFF0000)
     else
-      @box.draw(0xAACCCCCC)
+      @box.draw(0xFFCCCCCC)
     end
   end
 

@@ -11,8 +11,17 @@ class Camera
 	end
 
   def update
-		@x -= (@x - @subject.x) / 18.0
-		@y -= (@y - @subject.y) / 18.0
+		if @x - @subject.x > 100
+			@x -= (@x - (@subject.x + 100)) / 8
+		elsif @x - @subject.x < -100
+			@x -= (@x - (@subject.x - 100)) / 8
+		end
+
+		if @y - @subject.y > 100
+			@y -= (@y - (@subject.y + 100)) / 8
+		elsif @y - @subject.y < -100
+			@y -= (@y - (@subject.y - 100)) / 8
+		end
 
     @box.x = @x
     @box.y = @y

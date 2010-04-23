@@ -4,6 +4,7 @@ require 'rubygems'
 require 'gosu'
 require 'game/rect'
 require 'game/moveable'
+require 'game/world'
 require 'game/camera'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
@@ -18,7 +19,7 @@ class MyWindow < Gosu::Window
   attr_reader :camera
 
   def initialize
-    super(640, 480, false)
+    super(800, 600, false)
 
     self.caption = 'seekThemUp'
 
@@ -26,10 +27,11 @@ class MyWindow < Gosu::Window
     @debug    = Debug.new(self, ['quad', 'test', 'colision', 'area checked'])
     @quadtree = Quadtree.new(self)
 
+    @world     = World.new(self)
     @player    = Player.new(self, 0, 0, 16)
     @camera    = Camera.new(self, @player)
     @enemyList = []
-    100.times {
+    200.times {
       enemy              = Enemy.new(self, 100, 100, 8)
       enemy.speed        = (rand(100) / 100.0) + 0.1
       enemy.acceleration = (rand(100) / 100.0) * 0.1 + 0.07
@@ -69,13 +71,14 @@ class MyWindow < Gosu::Window
   end
 
   def draw
-    @quadtree.draw
+    @world.draw
+    #@quadtree.draw
     @player.draw
     @enemyList.each{|item|
       item.draw
     }
     @fps.draw
-    @debug.draw
+    #@debug.draw
   end
 
   def button_down(id)

@@ -1,7 +1,7 @@
 class Player < Moveable
 
   def draw
-		@box.draw(0xFFFF0000)
+		@box.draw(0xFFFFFF00)
   end
 
 end
