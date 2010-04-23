@@ -68,8 +68,8 @@ class Quadtree
 #    @area.outline(0xFFAAFFAA) if @depth == 0
 
     unless @is_leaf
-      @window.draw_line(@area.x, @area.top, 0xFF003300, @area.x, @area.bottom, 0xFF003300, 7)
-      @window.draw_line(@area.left, @area.y, 0xFF003300, @area.right, @area.y, 0xFF003300, 7)
+      @window.draw_line(@area.x - @window.camera.x, @area.top - @window.camera.y, 0xFF003300, @area.x - @window.camera.x, @area.bottom - @window.camera.y, 0xFF003300, 7)
+      @window.draw_line(@area.left - @window.camera.x, @area.y - @window.camera.y, 0xFF003300, @area.right - @window.camera.x, @area.y - @window.camera.y, 0xFF003300, 7)
 
       @nw_quad.draw
       @ne_quad.draw

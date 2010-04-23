@@ -10,7 +10,12 @@ class Rect
   end
 
   def draw(color=0xFFFFFFFF)
-    @window.draw_quad(@left, @top, color, @right, @top, color, @left, @bottom, color, @right, @bottom, color)
+    @window.draw_quad(
+      @left - @window.camera.x, @top - @window.camera.y, color, \
+      @right - @window.camera.x, @top - @window.camera.y, color, \
+      @left - @window.camera.x, @bottom - @window.camera.y, color, \
+      @right - @window.camera.x, @bottom - @window.camera.y, color \
+    )
   end
 
   def outline(color=0xFFFFFFFF)

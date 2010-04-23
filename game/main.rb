@@ -2,17 +2,20 @@
 
 require 'rubygems'
 require 'gosu'
+require 'game/rect'
 require 'game/moveable'
+require 'game/camera'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
 require 'game/util/quadtree'
-require 'game/util/rect'
 require 'game/util/fps'
 require 'game/util/debug'
 require 'game/util/tool'
 
 
 class MyWindow < Gosu::Window
+
+  attr_reader :camera
 
   def initialize
     super(640, 480, false)
@@ -23,7 +26,8 @@ class MyWindow < Gosu::Window
     @debug    = Debug.new(self, ['quad', 'test', 'colision', 'area checked'])
     @quadtree = Quadtree.new(self)
 
-    @player    = Player.new(self, self.width/2, self.height/2, 16)
+    @player    = Player.new(self, 0, 0, 16)
+    @camera    = Camera.new(self, @player)
     @enemyList = []
     100.times {
       enemy              = Enemy.new(self, 100, 100, 8)
@@ -50,12 +54,14 @@ class MyWindow < Gosu::Window
     end
 
     @debug.update
+
+    @camera.update
     @player.update
     @enemyList.each{|item|
       item.update
     }
 
-    @quadtree.update(@enemyList, Rect.new(self, self.width/2, self.height/2, self.width, self.height), 0, @player)
+    @quadtree.update(@enemyList, @camera.box, 0, @player)
     @quadtree.hit(@player.box).each{|item|
       Debug::count('colision')
       item.overlaps = true

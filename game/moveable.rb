@@ -9,8 +9,8 @@ class Moveable
     @x            = x
     @y            = y
 		@size         = s
-    @speed        = 2
-    @acceleration = 0.1
+    @speed        = 4
+    @acceleration = 0.2
     @friction     = 0.03
     @velocity     = [0,0]
     @box          = Rect.new(@window, @x, @y, s, s)
