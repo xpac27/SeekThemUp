@@ -1,0 +1,4 @@
+class Bullet < Moveable
+
+end
+

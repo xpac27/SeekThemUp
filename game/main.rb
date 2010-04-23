@@ -2,28 +2,37 @@
 
 require 'rubygems'
 require 'gosu'
-require 'game/player'
-require 'game/enemy'
-require 'game/quadtree'
-require 'game/rect'
-require 'game/fps'
-require 'game/debug'
+require 'game/moveable'
+require 'game/moveable/player'
+require 'game/moveable/enemy'
+require 'game/util/quadtree'
+require 'game/util/rect'
+require 'game/util/fps'
+require 'game/util/debug'
+require 'game/util/tool'
 
 
 class MyWindow < Gosu::Window
 
   def initialize
     super(640, 480, false)
+
     self.caption = 'seekThemUp'
 
-    @fps = Fps.new(self, :periodic)
-    @debug = Debug.new(self, ['quad', 'test', 'colision'])
-    @player = Player.new(self)
-    @enemyList = []
-    10.times {
-      @enemyList += [Enemy.new(self)]
-    }
+    @fps      = Fps.new(self, :periodic)
+    @debug    = Debug.new(self, ['quad', 'test', 'colision', 'area checked'])
     @quadtree = Quadtree.new(self)
+
+    @player    = Player.new(self, self.width/2, self.height/2, 16)
+    @enemyList = []
+    100.times {
+      enemy              = Enemy.new(self, 100, 100, 8)
+      enemy.speed        = (rand(100) / 100.0) + 0.1
+      enemy.acceleration = (rand(100) / 100.0) * 0.1 + 0.07
+      enemy.friction     = (rand(100) / 100.0) * 0.05 + 0.01
+      enemy.player       = @player
+      @enemyList += [enemy]
+    }
   end
 
   def update
@@ -41,33 +50,16 @@ class MyWindow < Gosu::Window
     end
 
     @debug.update
-
     @player.update
-
     @enemyList.each{|item|
       item.update
     }
 
-    @quadtree.update(@enemyList + [@player], Rect.new(self, self.width/2, self.height/2, self.width, self.height))
-
-    # check everie item against each other
-    @quadtree.check_colision
-
-#    # check player against enemies
-#    @quadtree.hit(@player.box).each{|item|
-#      Debug::count('colision')
-#      item.overlaps = true
-#      item.colide(@player.box)
-#    }
-#
-#    # check enemies against each other
-#    @enemyList.each{|enemy|
-#      @quadtree.hit(enemy.box).each{|item|
-#      Debug::count('colision')
-#        item.overlaps = true
-#        item.colide(enemy.box)
-#      }
-#    }
+    @quadtree.update(@enemyList, Rect.new(self, self.width/2, self.height/2, self.width, self.height), 0, @player)
+    @quadtree.hit(@player.box).each{|item|
+      Debug::count('colision')
+      item.overlaps = true
+    }
   end
 
   def draw

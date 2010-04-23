@@ -6,7 +6,7 @@ class Quadtree
     @itemList = []
   end
 
-  def update(items, area=nil, depth=0)
+  def update(items, area=nil, depth=0, focus=nil)
     Debug::count('quad')
 
     @depth = depth
@@ -34,16 +34,10 @@ class Quadtree
         in_se = (item.box.right >= @area.x and item.box.bottom >= @area.y)
         in_sw = (item.box.left <= @area.x and item.box.bottom >= @area.y)
 
-        # If it overlaps all 4 quadrants then insert it at the current deth
-        if in_nw and in_ne and in_se and in_sw
-            @itemList += [item]
-        # otherwise append it to a list to be inserted under every quadrant that it overlaps
-        else
-            nw_items += [item] if in_nw
-            ne_items += [item] if in_ne
-            se_items += [item] if in_se
-            sw_items += [item] if in_sw
-        end
+        nw_items += [item] if in_nw
+        ne_items += [item] if in_ne
+        se_items += [item] if in_se
+        sw_items += [item] if in_sw
       end
 
       # Create the sub-quadrants
@@ -53,10 +47,17 @@ class Quadtree
       @sw_quad = Quadtree.new(@window)
 
       # fill them with their items if they have some
-      @nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1) if nw_items.length != 0
-      @ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1) if ne_items.length != 0
-      @se_quad.update(se_items, @area.se_quadrant, @depth + 1) if se_items.length != 0
-      @sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1) if sw_items.length != 0
+			if (focus)
+				@nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1, focus) if (nw_items.length != 0 and (focus.box.left <= @area.x and focus.box.top <= @area.y))
+				@ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1, focus) if (ne_items.length != 0 and (focus.box.right >= @area.x and focus.box.top <= @area.y))
+				@se_quad.update(se_items, @area.se_quadrant, @depth + 1, focus) if (se_items.length != 0 and (focus.box.right >= @area.x and focus.box.bottom >= @area.y))
+				@sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1, focus) if (sw_items.length != 0 and (focus.box.left <= @area.x and focus.box.bottom >= @area.y))
+			else
+				@nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1) if nw_items.length != 0
+				@ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1) if ne_items.length != 0
+				@se_quad.update(se_items, @area.se_quadrant, @depth + 1) if se_items.length != 0
+				@sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1) if sw_items.length != 0
+			end
     else
       @itemList = items
       @is_leaf = true
@@ -89,7 +90,8 @@ class Quadtree
       hits += @se_quad.hit(rect) if (rect.right >= @area.x and rect.bottom >= @area.y)
     end
 
-    @area.draw(0x11FFFFFF) if @area
+#    @area.draw(0x11FFFFFF) if @area
+    Debug::count('area checked')
 
     hits
   end
@@ -104,6 +106,9 @@ class Quadtree
         end
       }
     }
+
+#    @area.draw(0x11FFFFFF) if @area
+    Debug::count('area checked')
 
     unless @is_leaf
       @nw_quad.check_colision
