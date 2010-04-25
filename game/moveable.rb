@@ -1,3 +1,4 @@
+# TODO this should < Rect
 class Moveable
 
   attr_reader   :box, :x, :y, :size
@@ -28,13 +29,17 @@ class Moveable
   end
 
   def draw
-		@box.draw(0x00CCCCCC)
+		@box.draw(0xFFCCCCCC)
   end
 
   def translate(x, y)
     @velocity[0] = @velocity[0] + @acceleration * x if @velocity[0].abs < @speed
     @velocity[1] = @velocity[1] + @acceleration * y if @velocity[1].abs < @speed
   end
+
+	def velocity=(v)
+		@velocity = v.dup
+	end
 
 end
 
