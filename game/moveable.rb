@@ -1,7 +1,7 @@
 # TODO this should < Rect
 class Moveable
 
-  attr_reader   :box, :x, :y, :size
+  attr_reader   :box, :x, :y, :size, :velocity
   attr_writer   :overlaps
   attr_accessor :speed, :acceleration, :friction
 

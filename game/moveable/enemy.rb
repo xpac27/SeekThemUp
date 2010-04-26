@@ -33,8 +33,10 @@ class Enemy < Moveable
     end
   end
 
-  def colide(rect)
+  def colide(item)
     #translate((box.left - rect.left)/2.0, (box.top - rect.top)/2.0)
+    @overlaps = true
+    @velocity = [item.velocity[0] * 1.2, item.velocity[1] * 1.2]
   end
 
 end

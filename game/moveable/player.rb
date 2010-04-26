@@ -1,35 +1,25 @@
 class Player < Moveable
 
   def initialize(window, x, y, s)
-    @smoke = []
-    @smokeTotal = 0
 		super(window, x, y, s)
+    @speed        = 5
+    @acceleration = 0.08
+    @friction     = 0.02
+    @smoke        = Smoke.new(window, self)
 	end
 
   def draw
-    @smokeTotal.times{|n|
-      @smoke[n].draw
-    }
 		@box.draw(0xFFFFFF00)
+    @smoke.draw
   end
 
   def update
-    @smokeTotal.times{|n|
-      @smoke[n].update
-      if @smoke[n].is_dead
-        @smoke[n] = @smoke[@smokeTotal-1]
-        @smokeTotal -= 1
-      end
-    }
+    @smoke.update
     super
   end
 
-  def translate(x, y)
-    puff = Smoke.new(@window, @x, @y, 8, 20)
-    puff.velocity = @velocity
-    puff.translate(x*-1, y*-1)
-    @smoke[@smokeTotal] = puff
-    @smokeTotal += 1
+  def translate(vx, vy)
+    @smoke.generate(8, 20, vx * -1.2, vy * -1.2)
     super
   end
 

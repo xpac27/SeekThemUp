@@ -1,4 +1,4 @@
-class Smoke < Moveable
+class Puff < Moveable
 
   attr_reader :is_dead
 
@@ -8,7 +8,7 @@ class Smoke < Moveable
 		@age          = 0.0
     @speed        = 10
     @acceleration = 6
-    @friction     = 0.4
+    @friction     = 0.8
 		@is_dead      = false
 	end
 
@@ -23,7 +23,7 @@ class Smoke < Moveable
 	end
 
   def draw
-		@box.draw(Gosu::Color.new((40 *(1 - (@age / @life))).floor, 255, 255, 255))
+		@box.draw(Gosu::Color.new((60 *(1 - (@age / @life))).floor, 255, 255, 255))
   end
 
 end

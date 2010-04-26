@@ -6,10 +6,11 @@ require 'game/rect'
 require 'game/moveable'
 require 'game/world'
 require 'game/camera'
+require 'game/smoke'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
 require 'game/moveable/bullet'
-require 'game/moveable/smoke'
+require 'game/moveable/puff'
 require 'game/util/quadtree'
 require 'game/util/fps'
 require 'game/util/debug'
@@ -35,9 +36,9 @@ class MyWindow < Gosu::Window
     @enemyList = []
     200.times {
       enemy              = Enemy.new(self, 100, 100, 8)
-      enemy.speed        = (rand(100) / 100.0) + 0.1
-      enemy.acceleration = (rand(100) / 100.0) * 0.1 + 0.07
-      enemy.friction     = (rand(100) / 100.0) * 0.05 + 0.01
+      enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
+      enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015
+      enemy.friction     = (rand(100) / 100.0) * 0.01 + 0.002
       enemy.player       = @player
       @enemyList += [enemy]
     }
@@ -68,7 +69,7 @@ class MyWindow < Gosu::Window
     @quadtree.update(@enemyList, @camera.box, 0, @player)
     @quadtree.hit(@player.box).each{|item|
       Debug::count('colision')
-      item.overlaps = true
+      item.colide(@player)
     }
   end
 
