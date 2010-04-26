@@ -23,7 +23,7 @@ class Puff < Moveable
 	end
 
   def draw
-		@box.draw(Gosu::Color.new((60 *(1 - (@age / @life))).floor, 255, 255, 255))
+		@box.draw(Gosu::Color.new((60 * (1 - (@age / @life))).floor, 255, 255, 255))
   end
 
 end

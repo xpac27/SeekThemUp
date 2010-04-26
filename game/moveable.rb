@@ -14,6 +14,7 @@ class Moveable
     @acceleration = 0.4
     @friction     = 0.1
     @velocity     = [0,0]
+    @angle        = 0
     @box          = Rect.new(@window, @x, @y, s, s)
   end
 
@@ -37,9 +38,21 @@ class Moveable
     @velocity[1] = @velocity[1] + @acceleration * y if @velocity[1].abs < @speed
   end
 
+  def rotate(a)
+    @angle += a
+  end
+
 	def velocity=(v)
 		@velocity = v.dup
 	end
+
+  def direction_x(a = 0)
+    Gosu::offset_x(@angle + a, 1)
+  end
+
+  def direction_y(a = 0)
+    Gosu::offset_y(@angle + a, 1)
+  end
 
 end
 

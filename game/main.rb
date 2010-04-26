@@ -46,16 +46,13 @@ class MyWindow < Gosu::Window
 
   def update
     if button_down?(Gosu::Button::KbUp)
-      @player.translate(0, -1)
-    end
-    if button_down?(Gosu::Button::KbDown)
-      @player.translate(0, 1)
+      @player.move_foreward
     end
     if button_down?(Gosu::Button::KbRight)
-      @player.translate(1, 0)
+      @player.turn_right
     end
     if button_down?(Gosu::Button::KbLeft)
-      @player.translate(-1, 0)
+      @player.turn_left
     end
 
     @debug.update
