@@ -1,43 +1,57 @@
 class Camera
 
-	attr_reader :box, :x, :y
+  attr_reader :x, :y, :box
 
-  def initialize(window, subject)
-    @window  = window
-    @subject = subject
-    @x       = @subject.x
-    @y       = @subject.y
-    @box     = Rect.new(@window, @x, @y, @window.width, @window.height)
+  def initialize
+    @x = 0
+    @y = 0
+    @characters = []
+    @box = Rect.new @x, @y, 800, 600
 	end
 
   def update
-		if @x - @subject.x > 100
-			@x -= (@x - (@subject.x + 100)) / 8
-		elsif @x - @subject.x < -100
-			@x -= (@x - (@subject.x - 100)) / 8
-		end
+    if @x - @subject.x > 100
+      @x -= (@x - (@subject.x + 100)) / 8
+    elsif @x - @subject.x < -100
+      @x -= (@x - (@subject.x - 100)) / 8
+    end
 
-		if @y - @subject.y > 100
-			@y -= (@y - (@subject.y + 100)) / 8
-		elsif @y - @subject.y < -100
-			@y -= (@y - (@subject.y - 100)) / 8
-		end
+    if @y - @subject.y > 100
+      @y -= (@y - (@subject.y + 100)) / 8
+    elsif @y - @subject.y < -100
+      @y -= (@y - (@subject.y - 100)) / 8
+    end
 
     @box.x = @x
     @box.y = @y
 	end
 
-	def x
-		@x - @window.width/2
-	end
+  def draw
+    @background.draw self
 
-	def y
-		@y - @window.height/2
-	end
+    @characters.each {|item|
+      glPushMatrix
+        glTranslatef (-@x + 400), (-@y + 300), 0
+        item.draw
+      glPopMatrix
+    }
+  end
 
-	def translate(x, y)
-		@box.x += x
-		@box.y += y
-	end
+  def set_subject item
+    @subject = item
+  end
+
+  def set_background item
+    @background = item
+  end
+
+  def add_character item
+    if item.kind_of?(Array) then
+      item.each{|c| add_character c}
+    elsif
+      @characters += [item]
+    end
+  end
 
 end
+

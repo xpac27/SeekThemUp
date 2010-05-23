@@ -2,13 +2,13 @@ class Puff < Moveable
 
   attr_reader :is_dead
 
-  def initialize(window, x, y, s, l)
-		super(window, x, y, rand(s) + s/4)
-		@life         = l
+  def initialize x, y, size, life
+		super x, y, rand(size) + size/4
+		@life         = life
 		@age          = 0.0
     @speed        = 10
-    @acceleration = 6
-    @friction     = 0.8
+    @acceleration = 8
+    @friction     = 3
 		@is_dead      = false
 	end
 
@@ -23,7 +23,8 @@ class Puff < Moveable
 	end
 
   def draw
-		@box.draw(Gosu::Color.new((60 * (1 - (@age / @life))).floor, 255, 255, 255))
+    glColor3f 0.2, 0.2, 0.2
+		@box.draw
   end
 
 end

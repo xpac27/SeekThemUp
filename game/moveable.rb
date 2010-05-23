@@ -1,21 +1,20 @@
 # TODO this should < Rect
 class Moveable
 
-  attr_reader   :box, :x, :y, :size, :velocity
+  attr_reader   :box
   attr_writer   :overlaps
-  attr_accessor :speed, :acceleration, :friction
+  attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity
 
-  def initialize(window, x, y, s)
-    @window       = window
+  def initialize x, y, size
     @x            = x
     @y            = y
-		@size         = s
-    @speed        = 4
+		@size         = size
+    @speed        = 1
     @acceleration = 0.4
     @friction     = 0.1
     @velocity     = [0,0]
     @angle        = 0
-    @box          = Rect.new(@window, @x, @y, s, s)
+    @box          = Rect.new @x, @y, @size, @size
   end
 
   def update
@@ -45,14 +44,6 @@ class Moveable
 	def velocity=(v)
 		@velocity = v.dup
 	end
-
-  def direction_x(a = 0)
-    Gosu::offset_x(@angle + a, 1)
-  end
-
-  def direction_y(a = 0)
-    Gosu::offset_y(@angle + a, 1)
-  end
 
 end
 

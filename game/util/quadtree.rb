@@ -1,14 +1,11 @@
 class Quadtree
 
-  def initialize(window)
-    @window = window
+  def initialize
     @is_leaf = true
     @itemList = []
   end
 
   def update(items, area=nil, depth=0, focus=nil)
-    Debug::count('quad')
-
     @depth = depth
     @itemList = []
 
@@ -41,10 +38,10 @@ class Quadtree
       end
 
       # Create the sub-quadrants
-      @nw_quad = Quadtree.new(@window)
-      @ne_quad = Quadtree.new(@window)
-      @se_quad = Quadtree.new(@window)
-      @sw_quad = Quadtree.new(@window)
+      @nw_quad = Quadtree.new
+      @ne_quad = Quadtree.new
+      @se_quad = Quadtree.new
+      @sw_quad = Quadtree.new
 
       # fill them with their items if they have some
 			if (focus)
@@ -65,17 +62,20 @@ class Quadtree
   end
 
   def draw
-#    @area.outline(0xFFAAFFAA) if @depth == 0
+		glColor3f 0, 0.2, 0
 
-    unless @is_leaf
-      @window.draw_line(@area.x - @window.camera.x, @area.top - @window.camera.y, 0xFF003300, @area.x - @window.camera.x, @area.bottom - @window.camera.y, 0xFF003300, 7)
-      @window.draw_line(@area.left - @window.camera.x, @area.y - @window.camera.y, 0xFF003300, @area.right - @window.camera.x, @area.y - @window.camera.y, 0xFF003300, 7)
+		glPushMatrix
+			glTranslatef -@area.x + 400, -@area.y + 300, 0 if @depth == 0
 
-      @nw_quad.draw
-      @ne_quad.draw
-      @se_quad.draw
-      @sw_quad.draw
-    end
+			@area.outline if (@area and @depth != 0)
+
+			unless @is_leaf
+				@nw_quad.draw
+				@ne_quad.draw
+				@se_quad.draw
+				@sw_quad.draw
+			end
+		glPopMatrix
   end
 
   def hit(rect)
@@ -91,7 +91,6 @@ class Quadtree
     end
 
 #    @area.draw(0x11FFFFFF) if @area
-    Debug::count('area checked')
 
     hits
   end

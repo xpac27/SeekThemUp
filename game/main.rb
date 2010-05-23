@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
-
 require 'rubygems'
-require 'gosu'
+require 'rubygame'
 require 'game/rect'
 require 'game/moveable'
 require 'game/world'
@@ -9,54 +7,111 @@ require 'game/camera'
 require 'game/smoke'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
-require 'game/moveable/bullet'
+#require 'game/moveable/bullet'
 require 'game/moveable/puff'
 require 'game/util/quadtree'
-require 'game/util/fps'
-require 'game/util/debug'
 require 'game/util/tool'
 
+require 'gl'
+require 'glu'
 
-class MyWindow < Gosu::Window
+include Gl
+include Glu
 
-  attr_reader :camera
+include Rubygame
+include Rubygame::Events
+
+
+class Game
+
+  include EventHandler::HasEventHandler
 
   def initialize
-    super(800, 600, false)
+    @screen = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
+    @screen.title = 'seekThemUp'
 
-    self.caption = 'seekThemUp'
+    @clock = Clock.new
+    @clock.target_framerate = 60
+    @clock.enable_tick_events
+    @clock.calibrate
 
-    @fps      = Fps.new(self, :periodic)
-    @debug    = Debug.new(self, ['quad', 'test', 'colision', 'area checked'])
-    @quadtree = Quadtree.new(self)
+    @queue = EventQueue.new
+    @queue.enable_new_style_events
 
-    @world     = World.new(self)
-    @player    = Player.new(self, 0, 0, 16)
-    @camera    = Camera.new(self, @player)
+    glClearColor 0.0, 0.0, 0.0, 0.0
+    resize 800, 600
+
+    @quadtree = Quadtree.new
+
+    @camera = Camera.new
+    @world  = World.new
+    @player = Player.new
+
     @enemyList = []
-    200.times {
-      enemy              = Enemy.new(self, 100, 100, 8)
+    100.times {
+      enemy              = Enemy.new(100, 100, 8)
       enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
       enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015
       enemy.friction     = (rand(100) / 100.0) * 0.01 + 0.002
       enemy.player       = @player
       @enemyList += [enemy]
     }
+
+    @camera.set_subject @player
+    @camera.set_background @world
+    @camera.add_character @player
+    @camera.add_character @enemyList
+
+    @active_keys = []
+    @running = true
+  end
+
+  def handle_events
+    @queue.each do |event|
+      case event
+        when KeyPressed
+          @active_keys.push event.key
+        when KeyReleased
+          @active_keys.delete event.key
+      end
+    end
+  end
+
+  def handle_keys
+    @active_keys.each{|key|
+      case key
+        when :up     : @player.move_foreward
+        when :down   : @player.move_backward
+        when :left   : @player.move_left
+        when :right  : @player.move_right
+        when :f      : puts @clock.framerate
+        when :q      : @running = false
+        when :escape : @running = false
+      end
+    }
+  end
+
+  def resize(w, h)
+    h = 1 if h == 0
+    glViewport 0, 0, w, h
+    glMatrixMode GL_PROJECTION
+    glLoadIdentity
+    gluPerspective 45.0, w.to_f / h.to_f, 1.0, 1000.0
+    glMatrixMode GL_MODELVIEW
+  end
+
+  def go
+    loop do
+      break unless @running
+      @clock.tick
+      handle_events
+      handle_keys
+      update
+      draw
+    end
   end
 
   def update
-    if button_down?(Gosu::Button::KbUp)
-      @player.move_foreward
-    end
-    if button_down?(Gosu::Button::KbRight)
-      @player.turn_right
-    end
-    if button_down?(Gosu::Button::KbLeft)
-      @player.turn_left
-    end
-
-    @debug.update
-
     @camera.update
     @player.update
     @enemyList.each{|item|
@@ -65,30 +120,27 @@ class MyWindow < Gosu::Window
 
     @quadtree.update(@enemyList, @camera.box, 0, @player)
     @quadtree.hit(@player.box).each{|item|
-      Debug::count('colision')
       item.colide(@player)
     }
   end
 
   def draw
-    @world.draw
-    #@quadtree.draw
-    @player.draw
-    @enemyList.each{|item|
-      item.draw
-    }
-    @fps.draw
-    #@debug.draw
-  end
+    glViewport 0, 0, 800, 600
+    glMatrixMode GL_PROJECTION
+    glLoadIdentity
+    glOrtho 0, 800, 600, 0, -1, 1
+    glMatrixMode GL_MODELVIEW
+    glLoadIdentity
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-  def button_down(id)
-    if id == Gosu::Button::KbEscape
-      close
-    end
+    @camera.draw
+    @quadtree.draw
+
+    GL.swap_buffers
   end
 
 end
 
-w = MyWindow.new
-w.show
+Game.new.go
+Rubygame.quit
 

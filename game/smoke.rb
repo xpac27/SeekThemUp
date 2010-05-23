@@ -1,16 +1,15 @@
 class Smoke
 
-  def initialize(window, subject)
-    @window    = window
+  def initialize subject
     @subject   = subject
     @puffs     = []
     @puffTotal = 0
   end
 
   def draw
-    @puffTotal.times{|n|
-      @puffs[n].draw
-    }
+		@puffTotal.times{|n|
+			@puffs[n].draw
+		}
   end
 
   def update
@@ -23,10 +22,10 @@ class Smoke
     }
 	end
 
-  def generate(s, l, vx, vy)
-    puff = Puff.new(@window, @subject.x, @subject.y, s, l)
-    puff.velocity = @subject.velocity
-    puff.translate(vx, vy)
+  def generate size, life, vx, vy
+    puff = Puff.new @subject.x, @subject.y, size, life
+		puff.velocity = @subject.velocity
+    puff.translate vx, vy
     @puffs[@puffTotal] = puff
     @puffTotal += 1
   end

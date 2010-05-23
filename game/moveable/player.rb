@@ -1,16 +1,16 @@
 class Player < Moveable
 
-  def initialize(window, x, y, s)
-		super(window, x, y, s)
-    @speed        = 5
+  def initialize
+    super 0, 0, 16
+    @speed        = 8
     @acceleration = 0.08
     @friction     = 0.02
-    @smoke        = Smoke.new(window, self)
-    @sprite       = Gosu::Image.new(@window, 'game/media/player.png', true)
+    @smoke        = Smoke.new self
 	end
 
   def draw
-    @sprite.draw_rot(@x - @window.camera.x, @y - @window.camera.y, 1, @angle)
+    glColor3f 1, 1, 1
+    @box.draw
     @smoke.draw
   end
 
@@ -20,30 +20,36 @@ class Player < Moveable
   end
 
   def move_foreward
-    @smoke.draw
+    translate 0, -1
+    @smoke.generate 10, 20, 0, 2
   end
 
-  def update
-    @smoke.update
-    super
+  def move_backward
+    translate 0, 1
+    @smoke.generate 10, 20, 0, -2
   end
 
-  def move_foreward
-    translate(direction_x, direction_y)
-    @smoke.generate(10, 20, direction_x * -1.2, direction_y * -1.2)
+  def move_left
+    translate -1, 0
+    @smoke.generate 10, 20, 2, 0
   end
 
-  def turn_right
-    rotate(5)
-    translate(direction_x(40) * 0.6, direction_y(40) * 0.6)
-    @smoke.generate(4, 15, direction_x(-140), direction_y(-140))
+  def move_right
+    translate 1, 0
+    @smoke.generate 10, 20, -2, 0
   end
 
-  def turn_left
-    rotate(-5)
-    translate(direction_x(-40) * 0.6, direction_y(-40) * 0.6)
-    @smoke.generate(4, 15, direction_x(140), direction_y(140))
-  end
+  #def turn_right
+    #rotate(5)
+    #translate(direction_x(40) * 0.6, direction_y(40) * 0.6)
+    #@smoke.generate(4, 15, direction_x(-140), direction_y(-140))
+  #end
+
+  #def turn_left
+    #rotate(-5)
+    #translate(direction_x(-40) * 0.6, direction_y(-40) * 0.6)
+    #@smoke.generate(4, 15, direction_x(140), direction_y(140))
+  #end
 
 end
 

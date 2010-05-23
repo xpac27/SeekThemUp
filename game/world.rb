@@ -1,25 +1,31 @@
 class World
 
-	def initialize(window)
-    @window = window
+	def initialize
 	end
 
-	def draw
-		nx = (@window.camera.x/32).floor * 32
-		ny = (@window.camera.y/32).floor * 32
+	def draw from_camera
+    glPushMatrix
+      glTranslatef (from_camera.x%32)*-1, (from_camera.y%32)*-1, 0
 
-		(@window.height/32 + 1).times{|n|
-      @window.draw_line(\
-				0 - @window.camera.x + nx, 32*n - @window.camera.y + ny, 0xFF222222, \
-				@window.width + 32 - @window.camera.x + nx, 32*n - @window.camera.y + ny, 0xFF222222 \
-			)
-		}
-		(@window.width/32 + 1).times{|n|
-      @window.draw_line(\
-				32*n - @window.camera.x + nx, 0 - @window.camera.y + ny, 0xFF222222, \
-				32*n - @window.camera.x + nx, @window.height + 32 - @window.camera.y + ny, 0xFF222222 \
-			)
-		}
+      # grey background
+      glColor3f 0.1, 0.1, 0.1
+
+      # draw vertical lines
+      (800/32 + 1).times{|n|
+        glBegin GL_LINES
+          glVertex2f n*32, 0
+          glVertex2f n*32, 632
+        glEnd
+      }
+
+      # draw horizontal lines
+      (600/32 + 2).times{|n|
+        glBegin GL_LINES
+          glVertex2f 0,   n*32
+          glVertex2f 832, n*32
+        glEnd
+      }
+    glPopMatrix
 	end
 
 end

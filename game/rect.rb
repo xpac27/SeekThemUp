@@ -2,27 +2,43 @@ class Rect
 
   attr_reader :x, :y, :top, :right, :bottom, :left
 
-  def initialize(window, x, y, width, height)
-    @window = window
+  def initialize x, y, width, height
     @x = x
     @y = y
     set_size(width, height)
   end
 
-  def draw(color=0xFFFFFFFF)
-    @window.draw_quad(
-      @left - @window.camera.x, @top - @window.camera.y, color, \
-      @right - @window.camera.x, @top - @window.camera.y, color, \
-      @left - @window.camera.x, @bottom - @window.camera.y, color, \
-      @right - @window.camera.x, @bottom - @window.camera.y, color \
-    )
+  def draw
+		glPushMatrix
+			glTranslatef @x, @y, 0
+
+			glBegin GL_QUADS
+				glVertex2i  @alf_width,  @alf_height
+				glVertex2i -@alf_width,  @alf_height
+				glVertex2i -@alf_width, -@alf_height
+				glVertex2i  @alf_width, -@alf_height
+			glEnd
+		glPopMatrix
   end
 
-  def outline(color=0xFFFFFFFF)
-    @window.draw_line(@left, @top, color, @right, @top, color, 8)
-    @window.draw_line(@left, @bottom, color, @right, @bottom, color, 8)
-    @window.draw_line(@left, @top, color, @left, @bottom, color, 8)
-    @window.draw_line(@right, @top, color, @right, @bottom, color, 8)
+  def outline
+		glPushMatrix
+			glTranslatef @x, @y, 0
+
+			glBegin GL_LINES
+				glVertex2i  @alf_width,  @alf_height
+				glVertex2i -@alf_width,  @alf_height
+
+				glVertex2i -@alf_width,  @alf_height
+				glVertex2i -@alf_width, -@alf_height
+
+				glVertex2i -@alf_width, -@alf_height
+				glVertex2i  @alf_width, -@alf_height
+
+				glVertex2i  @alf_width, -@alf_height
+				glVertex2i  @alf_width,  @alf_height
+			glEnd
+		glPopMatrix
   end
 
   def set_size(width, height)
@@ -68,24 +84,23 @@ class Rect
   end
 
   def overlaps?(rect)
-    Debug::count('test')
     (rect.right >= @left and rect.left <= @right and rect.bottom >= @top and rect.top <= @bottom)
   end
 
   def nw_quadrant
-    Rect.new(@window, @x - @alf_width/2, @y - @alf_height/2, @width/2, @height/2)
+    Rect.new @x - @alf_width/2, @y - @alf_height/2, @width/2, @height/2
   end
 
   def ne_quadrant
-    Rect.new(@window, @x + @alf_width/2, @y - @alf_height/2, @width/2, @height/2)
+    Rect.new @x + @alf_width/2, @y - @alf_height/2, @width/2, @height/2
   end
 
   def se_quadrant
-    Rect.new(@window, @x + @alf_width/2, @y + @alf_height/2, @width/2, @height/2)
+    Rect.new @x + @alf_width/2, @y + @alf_height/2, @width/2, @height/2
   end
 
   def sw_quadrant
-    Rect.new(@window, @x - @alf_width/2, @y + @alf_height/2, @width/2, @height/2)
+    Rect.new @x - @alf_width/2, @y + @alf_height/2, @width/2, @height/2
   end
 
 end

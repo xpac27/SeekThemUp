@@ -27,16 +27,17 @@ class Enemy < Moveable
 
   def draw
     if @overlaps
-      @box.draw(0xFFFF0000)
+      glColor3f 1, 0, 0
     else
-      @box.draw(0xFFCCCCCC)
+      glColor3f 0.6, 0.6, 0.6
     end
+		@box.draw
   end
 
   def colide(item)
     #translate((box.left - rect.left)/2.0, (box.top - rect.top)/2.0)
     @overlaps = true
-    @velocity = [item.velocity[0] * 1.2, item.velocity[1] * 1.2]
+    #@velocity = [item.velocity[0] * 1.2, item.velocity[1] * 1.2]
   end
 
 end
