@@ -4,10 +4,11 @@ require 'game/rect'
 require 'game/moveable'
 require 'game/world'
 require 'game/camera'
+require 'game/cursor'
 require 'game/smoke'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
-#require 'game/moveable/bullet'
+require 'game/moveable/bullet'
 require 'game/moveable/puff'
 require 'game/util/quadtree'
 require 'game/util/tool'
@@ -30,10 +31,10 @@ class Game
     @screen = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
     @screen.title = 'seekThemUp'
 
-    @clock = Clock.new
-    @clock.target_framerate = 60
-    @clock.enable_tick_events
-    @clock.calibrate
+    $clock = Clock.new
+    $clock.target_framerate = 60
+    $clock.enable_tick_events
+    $clock.calibrate
 
     @queue = EventQueue.new
     @queue.enable_new_style_events
@@ -42,25 +43,26 @@ class Game
     resize 800, 600
 
     @quadtree = Quadtree.new
+    @world    = World.new
+    @player   = Player.new
 
-    @camera = Camera.new
-    @world  = World.new
-    @player = Player.new
+    $camera = Camera.new
+    $cursor = Cursor.new
 
-    @enemyList = []
+    @enemy_list = []
     100.times {
       enemy              = Enemy.new(100, 100, 8)
       enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
       enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015
       enemy.friction     = (rand(100) / 100.0) * 0.01 + 0.002
       enemy.player       = @player
-      @enemyList += [enemy]
+      @enemy_list += [enemy]
     }
 
-    @camera.set_subject @player
-    @camera.set_background @world
-    @camera.add_character @player
-    @camera.add_character @enemyList
+    $camera.set_subject @player
+    $camera.set_background @world
+    $camera.add_character @player
+    $camera.add_character @enemy_list
 
     @active_keys = []
     @running = true
@@ -73,6 +75,13 @@ class Game
           @active_keys.push event.key
         when KeyReleased
           @active_keys.delete event.key
+        when MousePressed
+          @player.shooting = true if event.button == :mouse_left
+        when MouseReleased
+          @player.shooting = false if event.button == :mouse_left
+        when MouseMoved
+          $cursor.x = event.pos[0]
+          $cursor.y = event.pos[1]
       end
     end
   end
@@ -80,13 +89,13 @@ class Game
   def handle_keys
     @active_keys.each{|key|
       case key
-        when :up     : @player.move_foreward
-        when :down   : @player.move_backward
-        when :left   : @player.move_left
-        when :right  : @player.move_right
-        when :f      : puts @clock.framerate
-        when :q      : @running = false
-        when :escape : @running = false
+        when :w          : @player.move_foreward
+        when :s          : @player.move_backward
+        when :a          : @player.move_left
+        when :d          : @player.move_right
+        when :f          : puts $clock.framerate
+        when :q          : @running = false
+        when :escape     : @running = false
       end
     }
   end
@@ -103,7 +112,7 @@ class Game
   def go
     loop do
       break unless @running
-      @clock.tick
+      $clock.tick
       handle_events
       handle_keys
       update
@@ -112,15 +121,25 @@ class Game
   end
 
   def update
-    @camera.update
+    $camera.update
     @player.update
-    @enemyList.each{|item|
+    @enemy_list.each{|item|
       item.update
     }
 
-    @quadtree.update(@enemyList, @camera.box, 0, @player)
+    colided = false
+    @quadtree.update(@enemy_list, $camera.box, 0)
     @quadtree.hit(@player.box).each{|item|
-      item.colide(@player)
+      item.colide
+      colided = true
+    }
+    $camera.shake 2 if colided
+
+    @player.bullet_list.each{|bullet|
+      @quadtree.hit(bullet.box).each{|item|
+        @enemy_list.delete item
+        item.colide
+      }
     }
   end
 
@@ -133,7 +152,7 @@ class Game
     glLoadIdentity
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-    @camera.draw
+    $camera.draw
     @quadtree.draw
 
     GL.swap_buffers

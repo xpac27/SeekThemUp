@@ -1,55 +1,72 @@
 class Player < Moveable
 
+	attr_reader :bullet_list
+	attr_accessor :shooting
+
   def initialize
     super 0, 0, 16
-    @speed        = 8
-    @acceleration = 0.08
-    @friction     = 0.02
+    @speed        = 6
+    @acceleration = 0.24
+    @friction     = 0.10
     @smoke        = Smoke.new self
+    @bullet_list  = []
+		@shooting     = false
+		@latest_shoot = 0
 	end
 
   def draw
-    glColor3f 1, 1, 1
-    @box.draw
     @smoke.draw
+		@bullet_list.each {|item| item.draw}
+    glColor3f 1, 1, 1
+    super
   end
 
   def update
     @smoke.update
+		@bullet_list.each {|item|
+			if $camera.is_visible? item then
+				item.update
+			else
+				@bullet_list.delete item
+			end
+		}
+		if @shooting then
+			shoot if $clock.lifetime - @latest_shoot > 200
+		else
+				@latest_shoot = 0
+		end
     super
   end
 
   def move_foreward
     translate 0, -1
-    @smoke.generate 10, 20, 0, 2
+    @smoke.generate 8, 12, 0, 1.5
   end
 
   def move_backward
     translate 0, 1
-    @smoke.generate 10, 20, 0, -2
+    @smoke.generate 8, 12, 0, -1.5
   end
 
   def move_left
     translate -1, 0
-    @smoke.generate 10, 20, 2, 0
+    @smoke.generate 8, 12, 1.5, 0
   end
 
   def move_right
     translate 1, 0
-    @smoke.generate 10, 20, -2, 0
+    @smoke.generate 8, 12, -1.5, 0
   end
 
-  #def turn_right
-    #rotate(5)
-    #translate(direction_x(40) * 0.6, direction_y(40) * 0.6)
-    #@smoke.generate(4, 15, direction_x(-140), direction_y(-140))
-  #end
-
-  #def turn_left
-    #rotate(-5)
-    #translate(direction_x(-40) * 0.6, direction_y(-40) * 0.6)
-    #@smoke.generate(4, 15, direction_x(140), direction_y(140))
-  #end
+  def shoot
+		dx = $cursor.x - @x
+		dy = $cursor.y - @y
+		mag = Math.sqrt(dx**2 + dy**2)
+		dx = dx/mag
+		dy = dy/mag
+		@bullet_list += [Bullet.new @x, @y, 2, [dx, dy]]
+		@latest_shoot = $clock.lifetime
+	end
 
 end
 

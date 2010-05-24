@@ -53,5 +53,14 @@ class Camera
     end
   end
 
+  def shake power
+    @x = @x + (rand(3) - 1) * power
+    @y = @y + (rand(3) - 1) * power
+  end
+
+	def is_visible? item
+		item.box.overlaps? @box
+	end
+
 end
 

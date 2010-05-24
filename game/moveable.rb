@@ -29,7 +29,7 @@ class Moveable
   end
 
   def draw
-		@box.draw(0xFFCCCCCC)
+		@box.draw
   end
 
   def translate(x, y)
