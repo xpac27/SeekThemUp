@@ -1,8 +1,5 @@
 class World
 
-  def initialize
-  end
-
   def draw from_camera
     glPushMatrix
       glTranslatef (from_camera.x%32)*-1, (from_camera.y%32)*-1, 0

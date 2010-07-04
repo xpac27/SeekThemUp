@@ -46,8 +46,8 @@ class Game
     @world    = World.new
     @player   = Player.new
 
-    $camera = Camera.new
-    $cursor = Cursor.new
+    $camera    = Camera.new
+    $cursor    = Cursor.new
 
     @enemy_list = []
     200.times {
@@ -130,15 +130,16 @@ class Game
     colided = false
     @quadtree.update(@enemy_list, $camera.box, 0)
     @quadtree.hit(@player.box).each{|item|
-      item.colide
       colided = true
     }
     $camera.shake 2 if colided
 
     @player.bullet_list.each{|bullet|
       @quadtree.hit(bullet.box).each{|item|
+        $camera.remove_character item
         @enemy_list.delete item
-        item.colide
+        @player.bullet_list.delete bullet
+        break
       }
     }
   end

@@ -26,16 +26,8 @@ class Enemy < Moveable
   end
 
   def draw
-    if @overlaps
-      glColor3f 1, 0, 0
-    else
-      glColor3f 0.6, 0.6, 0.6
-    end
+    glColor3f 0.6, 0.6, 0.6
     @box.draw
-  end
-
-  def colide
-    @overlaps = true
   end
 
 end

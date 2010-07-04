@@ -56,6 +56,10 @@ class Camera
     end
   end
 
+  def remove_character item
+    @characters.delete item
+  end
+
   def shake power
     @x = @x + (rand(3) - 1) * power
     @y = @y + (rand(3) - 1) * power
