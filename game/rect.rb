@@ -9,36 +9,36 @@ class Rect
   end
 
   def draw
-		glPushMatrix
-			glTranslatef @x, @y, 0
+    glPushMatrix
+      glTranslatef @x, @y, 0
 
-			glBegin GL_QUADS
-				glVertex2i  @alf_width,  @alf_height
-				glVertex2i -@alf_width,  @alf_height
-				glVertex2i -@alf_width, -@alf_height
-				glVertex2i  @alf_width, -@alf_height
-			glEnd
-		glPopMatrix
+      glBegin GL_QUADS
+        glVertex2i  @alf_width,  @alf_height
+        glVertex2i -@alf_width,  @alf_height
+        glVertex2i -@alf_width, -@alf_height
+        glVertex2i  @alf_width, -@alf_height
+      glEnd
+    glPopMatrix
   end
 
   def outline
-		glPushMatrix
-			glTranslatef @x, @y, 0
+    glPushMatrix
+      glTranslatef @x, @y, 0
 
-			glBegin GL_LINES
-				glVertex2i  @alf_width,  @alf_height
-				glVertex2i -@alf_width,  @alf_height
+      glBegin GL_LINES
+        glVertex2i  @alf_width,  @alf_height
+        glVertex2i -@alf_width,  @alf_height
 
-				glVertex2i -@alf_width,  @alf_height
-				glVertex2i -@alf_width, -@alf_height
+        glVertex2i -@alf_width,  @alf_height
+        glVertex2i -@alf_width, -@alf_height
 
-				glVertex2i -@alf_width, -@alf_height
-				glVertex2i  @alf_width, -@alf_height
+        glVertex2i -@alf_width, -@alf_height
+        glVertex2i  @alf_width, -@alf_height
 
-				glVertex2i  @alf_width, -@alf_height
-				glVertex2i  @alf_width,  @alf_height
-			glEnd
-		glPopMatrix
+        glVertex2i  @alf_width, -@alf_height
+        glVertex2i  @alf_width,  @alf_height
+      glEnd
+    glPopMatrix
   end
 
   def set_size(width, height)

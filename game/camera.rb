@@ -7,7 +7,7 @@ class Camera
     @y = 0
     @characters = []
     @box = Rect.new @x, @y, 800, 600
-	end
+  end
 
   def update
     if @x - @subject.x > 100
@@ -24,7 +24,7 @@ class Camera
 
     @box.x = @x
     @box.y = @y
-	end
+  end
 
   def draw
     @background.draw self
@@ -58,9 +58,9 @@ class Camera
     @y = @y + (rand(3) - 1) * power
   end
 
-	def is_visible? item
-		item.box.overlaps? @box
-	end
+  def is_visible? item
+    item.box.overlaps? @box
+  end
 
 end
 

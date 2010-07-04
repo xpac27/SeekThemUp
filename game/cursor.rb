@@ -5,7 +5,7 @@ class Cursor
   def initialize
     @x = 0
     @y = 0
-	end
+  end
 
   def draw
     glPushMatrix

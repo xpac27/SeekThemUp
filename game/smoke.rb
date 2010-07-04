@@ -7,9 +7,9 @@ class Smoke
   end
 
   def draw
-		@puffTotal.times{|n|
-			@puffs[n].draw
-		}
+    @puffTotal.times{|n|
+      @puffs[n].draw
+    }
   end
 
   def update
@@ -20,11 +20,11 @@ class Smoke
         @puffTotal -= 1
       end
     }
-	end
+  end
 
   def generate size, life, vx, vy
     puff = Puff.new @subject.x, @subject.y, size, life
-		puff.velocity = @subject.velocity
+    puff.velocity = @subject.velocity
     puff.translate vx, vy
     @puffs[@puffTotal] = puff
     @puffTotal += 1

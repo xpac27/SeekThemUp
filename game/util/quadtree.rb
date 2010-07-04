@@ -44,17 +44,17 @@ class Quadtree
       @sw_quad = Quadtree.new
 
       # fill them with their items if they have some
-			if (focus)
-				@nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1, focus) if (nw_items.length != 0 and (focus.box.left <= @area.x and focus.box.top <= @area.y))
-				@ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1, focus) if (ne_items.length != 0 and (focus.box.right >= @area.x and focus.box.top <= @area.y))
-				@se_quad.update(se_items, @area.se_quadrant, @depth + 1, focus) if (se_items.length != 0 and (focus.box.right >= @area.x and focus.box.bottom >= @area.y))
-				@sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1, focus) if (sw_items.length != 0 and (focus.box.left <= @area.x and focus.box.bottom >= @area.y))
-			else
-				@nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1) if nw_items.length != 0
-				@ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1) if ne_items.length != 0
-				@se_quad.update(se_items, @area.se_quadrant, @depth + 1) if se_items.length != 0
-				@sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1) if sw_items.length != 0
-			end
+      if (focus)
+        @nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1, focus) if (nw_items.length != 0 and (focus.box.left <= @area.x and focus.box.top <= @area.y))
+        @ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1, focus) if (ne_items.length != 0 and (focus.box.right >= @area.x and focus.box.top <= @area.y))
+        @se_quad.update(se_items, @area.se_quadrant, @depth + 1, focus) if (se_items.length != 0 and (focus.box.right >= @area.x and focus.box.bottom >= @area.y))
+        @sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1, focus) if (sw_items.length != 0 and (focus.box.left <= @area.x and focus.box.bottom >= @area.y))
+      else
+        @nw_quad.update(nw_items, @area.nw_quadrant, @depth + 1) if nw_items.length != 0
+        @ne_quad.update(ne_items, @area.ne_quadrant, @depth + 1) if ne_items.length != 0
+        @se_quad.update(se_items, @area.se_quadrant, @depth + 1) if se_items.length != 0
+        @sw_quad.update(sw_items, @area.sw_quadrant, @depth + 1) if sw_items.length != 0
+      end
     else
       @itemList = items
       @is_leaf = true
@@ -62,20 +62,20 @@ class Quadtree
   end
 
   def draw
-		glColor3f 0, 0.2, 0
+    glColor3f 0, 0.2, 0
 
-		glPushMatrix
-			glTranslatef -@area.x + 400, -@area.y + 300, 0 if @depth == 0
+    glPushMatrix
+      glTranslatef -@area.x + 400, -@area.y + 300, 0 if @depth == 0
 
-			@area.outline if (@area and @depth != 0)
+      @area.outline if (@area and @depth != 0)
 
-			unless @is_leaf
-				@nw_quad.draw
-				@ne_quad.draw
-				@se_quad.draw
-				@sw_quad.draw
-			end
-		glPopMatrix
+      unless @is_leaf
+        @nw_quad.draw
+        @ne_quad.draw
+        @se_quad.draw
+        @sw_quad.draw
+      end
+    glPopMatrix
   end
 
   def hit(rect)

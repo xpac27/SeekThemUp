@@ -8,7 +8,7 @@ class Moveable
   def initialize x, y, size
     @x            = x
     @y            = y
-		@size         = size
+    @size         = size
     @speed        = 1
     @acceleration = 0.4
     @friction     = 0.1
@@ -29,7 +29,7 @@ class Moveable
   end
 
   def draw
-		@box.draw
+    @box.draw
   end
 
   def translate(x, y)
@@ -41,9 +41,9 @@ class Moveable
     @angle += a
   end
 
-	def velocity=(v)
-		@velocity = v.dup
-	end
+  def velocity=(v)
+    @velocity = v.dup
+  end
 
 end
 
