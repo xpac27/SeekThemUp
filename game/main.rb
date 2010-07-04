@@ -50,7 +50,7 @@ class Game
     $cursor = Cursor.new
 
     @enemy_list = []
-    100.times {
+    200.times {
       enemy              = Enemy.new(100, 100, 8)
       enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
       enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015

@@ -28,13 +28,16 @@ class Camera
 
   def draw
     @background.draw self
-
     @characters.each {|item|
-      glPushMatrix
-        glTranslatef (-@x + 400), (-@y + 300), 0
-        item.draw
-      glPopMatrix
+      draw_this item
     }
+  end
+
+  def draw_this item
+    glPushMatrix
+      glTranslatef (-@x + 400), (-@y + 300), 0
+      item.draw
+    glPopMatrix
   end
 
   def set_subject item

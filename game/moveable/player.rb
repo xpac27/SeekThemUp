@@ -31,7 +31,7 @@ class Player < Moveable
       end
     }
     if @shooting then
-      shoot if $clock.lifetime - @latest_shoot > 200
+      shoot if $clock.lifetime - @latest_shoot > 100
     else
         @latest_shoot = 0
     end
@@ -64,7 +64,7 @@ class Player < Moveable
     mag = Math.sqrt(dx**2 + dy**2)
     dx = dx/mag
     dy = dy/mag
-    @bullet_list += [Bullet.new @x, @y, 2, [dx, dy]]
+    @bullet_list += [Bullet.new @x, @y, 5, [dx, dy]]
     @latest_shoot = $clock.lifetime
   end
 

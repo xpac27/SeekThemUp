@@ -8,7 +8,7 @@ class Bullet
     @y = y
     @box = Rect.new @x, @y, size, size
     @direction = direction
-    @speed = 15
+    @speed = 20
   end
 
   def update
