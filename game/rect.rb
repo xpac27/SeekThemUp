@@ -132,4 +132,8 @@ class Rect
     Rect.new @x - @alf_width/2, @y + @alf_height/2, @width/2, @height/2
   end
 
+  def distance_to(rect)
+    return Math.sqrt((@x - rect.x)**2 + (@y - rect.y)**2)
+  end
+
 end

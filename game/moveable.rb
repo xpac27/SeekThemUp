@@ -45,5 +45,9 @@ class Moveable
     @velocity = v.dup
   end
 
+  def distance_to(item)
+    return @box.distance_to item.box
+  end
+
 end
 

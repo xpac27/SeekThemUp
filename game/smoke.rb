@@ -1,14 +1,13 @@
 class Smoke
 
-  def initialize subject
-    @subject   = subject
+  def initialize
     @puffs     = []
     @puffTotal = 0
   end
 
   def draw
     @puffTotal.times{|n|
-      @puffs[n].draw
+      $camera.draw_this @puffs[n]
     }
   end
 
@@ -22,9 +21,9 @@ class Smoke
     }
   end
 
-  def generate size, life, vx, vy
-    puff = Puff.new @subject.x, @subject.y, size, life
-    puff.velocity = @subject.velocity
+  def generate subject, size, life, vx, vy
+    puff = Puff.new subject.x, subject.y, size, life
+    puff.velocity = subject.velocity
     puff.translate vx, vy
     @puffs[@puffTotal] = puff
     @puffTotal += 1

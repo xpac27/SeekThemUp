@@ -1,3 +1,3 @@
 #!/bin/bash
-rsdl game/main.rb
+rsdl main.rb
 

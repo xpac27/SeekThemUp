@@ -5,7 +5,7 @@ class Enemy < Moveable
   @player
 
   def update
-    if Tool::distance(self, @player) < 120
+    if distance_to(@player) < 120
       translate((@player.x - @x) / (@player.x - @x).abs, (@player.y - @y) / (@player.y - @y).abs)
     else
       @direction = rand(10) if rand(30) == 1
