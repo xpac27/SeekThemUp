@@ -11,11 +11,13 @@ require 'game/world'
 require 'game/camera'
 require 'game/cursor'
 require 'game/smoke'
+require 'game/explosion'
 require 'game/quadtree'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
 require 'game/moveable/bullet'
 require 'game/moveable/puff'
+require 'game/moveable/projectil'
 
 
 include Gl
@@ -30,24 +32,26 @@ class Main
   include EventHandler::HasEventHandler
 
   def initialize
-    @screen = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
+    @screen       = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
     @screen.title = 'seekThemUp'
 
-    $clock = Clock.new
+    $clock     = Clock.new
+    $cursor    = Cursor.new
+    $camera    = Camera.new
+    $smoke     = Smoke.new
+    $explosion = Explosion.new
+
     $clock.target_framerate = 60
     $clock.enable_tick_events
     $clock.calibrate
 
-    $cursor = Cursor.new
+    @active_keys = []
+    @running     = true
+    @queue       = EventQueue.new
+    @queue.enable_new_style_events
 
     glClearColor 0.0, 0.0, 0.0, 0.0
     resize 800, 600
-
-    @queue = EventQueue.new
-    @queue.enable_new_style_events
-
-    @active_keys = []
-    @running = true
 
     @game = Game.new
   end

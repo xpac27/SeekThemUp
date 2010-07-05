@@ -1,19 +1,10 @@
-class Bullet
+class Bullet < Moveable
 
-  attr_reader :box
-  attr_accessor :speed
-
-  def initialize x, y, size, direction
-    @x = x
-    @y = y
-    @box = Rect.new @x, @y, size, size
-    @direction = direction
+  def initialize x, y, size
+    super x, y, size
     @speed = 20
-  end
-
-  def update
-    @box.x = @x += @direction[0]*@speed
-    @box.y = @y += @direction[1]*@speed
+    @acceleration = 20
+    @friction = 0
   end
 
   def draw

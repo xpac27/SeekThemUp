@@ -14,7 +14,7 @@ class Smoke
   def update
     @puffTotal.times{|n|
       @puffs[n].update
-      if @puffs[n].is_dead
+      if @puffs[n].is_dead?
         @puffs[n] = @puffs[@puffTotal - 1]
         @puffTotal -= 1
       end

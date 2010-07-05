@@ -26,7 +26,7 @@ class Enemy < Moveable
   end
 
   def draw
-    glColor3f 0.6, 0.6, 0.6
+    glColor3f 0.4, 0.2, 0.2
     @box.draw
   end
 

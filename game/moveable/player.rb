@@ -53,7 +53,9 @@ class Player < Moveable
     mag = Math.sqrt(dx**2 + dy**2)
     dx = dx/mag
     dy = dy/mag
-    @bullet_list += [Bullet.new @x, @y, 5, [dx, dy]]
+    bullet = Bullet.new @x, @y, 5
+    bullet.translate dx, dy
+    @bullet_list += [bullet]
     @latest_shoot = $clock.lifetime
   end
 

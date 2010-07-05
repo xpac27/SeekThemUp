@@ -33,8 +33,10 @@ class Moveable
   end
 
   def translate(x, y)
-    @velocity[0] = @velocity[0] + @acceleration * x if @velocity[0].abs < @speed
-    @velocity[1] = @velocity[1] + @acceleration * y if @velocity[1].abs < @speed
+    x /= Math.sqrt(x**2 + y**2)
+    y /= Math.sqrt(x**2 + y**2)
+    @velocity[0] = @velocity[0] + @acceleration * x if @velocity[0].abs < x.abs * @speed
+    @velocity[1] = @velocity[1] + @acceleration * y if @velocity[1].abs < y.abs * @speed
   end
 
   def rotate(a)

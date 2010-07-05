@@ -14,14 +14,10 @@ class Game
       @enemy_list += [enemy]
     }
 
-    $camera = Camera.new
-
     $camera.set_subject @player
     $camera.set_background @world
     $camera.add_character @player
     $camera.add_character @enemy_list
-
-    $smoke = Smoke.new
   end
 
   def handle_keys list
@@ -39,22 +35,24 @@ class Game
   def update
     $camera.update
     $smoke.update
+    $explosion.update
 
     @player.update
-    @enemy_list.each{|item|
+    @enemy_list.each {|item|
       item.update
     }
 
     @quadtree.update(@enemy_list, $camera.box, 0)
-    @quadtree.hit(@player.box).each{|item|
+    @quadtree.hit(@player.box).each {|item|
       $camera.shake 5
       break
     }
 
-    @player.bullet_list.each{|bullet|
-      @quadtree.hit(bullet.box).each{|enemy|
+    @player.bullet_list.each {|bullet|
+      @quadtree.hit(bullet.box).each {|enemy|
         $camera.shake 3
         $camera.remove_character enemy
+        $explosion.generate bullet, 2, 20
         @enemy_list.delete enemy
         @player.bullet_list.delete bullet
         break
@@ -65,6 +63,7 @@ class Game
   def draw
     $camera.draw
     $smoke.draw
+    $explosion.draw
     #@quadtree.draw
   end
 
