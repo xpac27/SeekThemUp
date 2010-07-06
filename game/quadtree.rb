@@ -61,8 +61,8 @@ class Quadtree
     end
   end
 
-  def draw
-    glColor3f 0, 0.2, 0
+  def draw r, v, b
+    glColor3f r, v, b
 
     glPushMatrix
       glTranslatef -@area.x + 400, -@area.y + 300, 0 if @depth == 0
@@ -70,10 +70,10 @@ class Quadtree
       @area.outline if (@area and @depth != 0)
 
       unless @is_leaf
-        @nw_quad.draw
-        @ne_quad.draw
-        @se_quad.draw
-        @sw_quad.draw
+        @nw_quad.draw r, v, b
+        @ne_quad.draw r, v, b
+        @se_quad.draw r, v, b
+        @sw_quad.draw r, v, b
       end
     glPopMatrix
   end

@@ -48,11 +48,19 @@ class Camera
     @background = item
   end
 
-  def add_character item
+  def append_character item
     if item.kind_of?(Array) then
-      item.each{|c| add_character c}
+      item.each{|c| append_character c}
     elsif
       @characters += [item]
+    end
+  end
+
+  def prepend_character item
+    if item.kind_of?(Array) then
+      item.each{|c| prepend_character c}
+    elsif
+      @characters.unshift item
     end
   end
 

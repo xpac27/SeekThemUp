@@ -18,6 +18,7 @@ require 'game/moveable/enemy'
 require 'game/moveable/bullet'
 require 'game/moveable/puff'
 require 'game/moveable/projectil'
+require 'game/moveable/energy'
 
 
 include Gl
