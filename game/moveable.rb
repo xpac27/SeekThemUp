@@ -8,6 +8,8 @@ class Moveable
   def initialize x, y, size
     @x            = x
     @y            = y
+    @tx           = 0
+    @ty           = 0
     @size         = size
     @speed        = 1
     @acceleration = 0.4
@@ -21,6 +23,15 @@ class Moveable
     @overlaps = false
     @x = @box.x = @x + @velocity[0]
     @y = @box.y = @y + @velocity[1]
+
+    unless (@tx == 0 and @ty == 0)
+      @tx /= Math.sqrt(@tx**2 + @ty**2)
+      @ty /= Math.sqrt(@tx**2 + @ty**2)
+      @velocity[0] = @velocity[0] + @acceleration * @tx if @velocity[0].abs < @tx.abs * @speed
+      @velocity[1] = @velocity[1] + @acceleration * @ty if @velocity[1].abs < @ty.abs * @speed
+      @tx = 0
+      @ty = 0
+    end
 
     @velocity[0] = (@velocity[0] - @friction) if (@velocity[0] > 0)
     @velocity[1] = (@velocity[1] - @friction) if (@velocity[1] > 0)
@@ -37,10 +48,8 @@ class Moveable
   end
 
   def translate(x, y)
-    x /= Math.sqrt(x**2 + y**2)
-    y /= Math.sqrt(x**2 + y**2)
-    @velocity[0] = @velocity[0] + @acceleration * x if @velocity[0].abs < x.abs * @speed
-    @velocity[1] = @velocity[1] + @acceleration * y if @velocity[1].abs < y.abs * @speed
+    @tx = x unless x == 0
+    @ty = y unless y == 0
   end
 
   def rotate(a)

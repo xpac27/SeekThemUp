@@ -28,8 +28,8 @@ class Game
     list.each{|key|
       case key
         when :mouse_left : @player.shoot
-        when :w          : @player.move_foreward
-        when :s          : @player.move_backward
+        when :w          : @player.move_up
+        when :s          : @player.move_down
         when :a          : @player.move_left
         when :d          : @player.move_right
       end

@@ -25,12 +25,12 @@ class Player < Moveable
     super
   end
 
-  def move_foreward
+  def move_up
     translate 0, -1
     $smoke.generate self, 8, 12, 0, 1.5
   end
 
-  def move_backward
+  def move_down
     translate 0, 1
     $smoke.generate self, 8, 12, 0, -1.5
   end
