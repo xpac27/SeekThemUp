@@ -11,14 +11,36 @@ class Rect
   def draw
     glPushMatrix
       glTranslatef @x, @y, 0
-
-      glBegin GL_QUADS
-        glVertex2i  @alf_width,  @alf_height
-        glVertex2i -@alf_width,  @alf_height
-        glVertex2i -@alf_width, -@alf_height
-        glVertex2i  @alf_width, -@alf_height
-      glEnd
+      if @surface
+        glBindTexture   GL_TEXTURE_2D, glGenTextures(1)[0]
+        glTexImage2D    GL_TEXTURE_2D, 0, GL_RGBA, @surface.w, @surface.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, @surface.pixels
+        glTexParameter  GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR
+        glTexParameter  GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST
+        glEnable        GL_TEXTURE_2D
+        glBegin         GL_QUADS
+          glTexCoord2i  1,           0
+          glVertex2i    @alf_width, -@alf_height
+          glTexCoord2i  1,           1
+          glVertex2i    @alf_width,  @alf_height
+          glTexCoord2i  0,           1
+          glVertex2i   -@alf_width,  @alf_height
+          glTexCoord2i  0,           0
+          glVertex2i   -@alf_width, -@alf_height
+        glEnd
+        glDeleteTextures 1
+      else
+        glBegin GL_QUADS
+          glVertex2i    @alf_width, -@alf_height
+          glVertex2i    @alf_width,  @alf_height
+          glVertex2i   -@alf_width,  @alf_height
+          glVertex2i   -@alf_width, -@alf_height
+        glEnd
+      end
     glPopMatrix
+  end
+
+  def set_texture file
+    @surface = Surface.load file
   end
 
   def outline

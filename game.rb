@@ -16,6 +16,8 @@ class Game
       @enemy_list += [enemy]
     }
 
+    #@player.set_texture 'game/media/player.png'
+
     $camera.set_subject @player
     $camera.set_background @world
     $camera.append_character @player
@@ -75,11 +77,11 @@ class Game
   end
 
   def draw
-    $smoke.draw
     $camera.draw
+    $smoke.draw
     $explosion.draw
-    @quadtree_enemy.draw 0.2, 0, 0
-    @quadtree_energy.draw 0, 0, 0.2
+    #@quadtree_enemy.draw 0.2, 0, 0
+    #@quadtree_energy.draw 0, 0, 0.2
   end
 
 end

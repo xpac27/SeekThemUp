@@ -32,6 +32,10 @@ class Moveable
     @box.draw
   end
 
+  def set_texture file
+    @box.set_texture file
+  end
+
   def translate(x, y)
     x /= Math.sqrt(x**2 + y**2)
     y /= Math.sqrt(x**2 + y**2)

@@ -2,7 +2,7 @@ class Energy < Moveable
 
   def initialize x, y, subject
     super x, y, 5
-    @speed        = 0.8
+    @speed        = 2.5
     @acceleration = 0.06
     @friction     = 0.05
     @subject = subject
