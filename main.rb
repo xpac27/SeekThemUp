@@ -4,8 +4,11 @@ require 'rubygame'
 require 'gl'
 require 'glu'
 
+require 'rubygame/sfont'
+
 require 'game'
 require 'game/rect'
+require 'game/text'
 require 'game/moveable'
 require 'game/world'
 require 'game/camera'
@@ -33,10 +36,9 @@ class Main
   include EventHandler::HasEventHandler
 
   def initialize
-    @screen       = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
-    @screen.title = 'seekThemUp'
-
+    $screen    = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
     $clock     = Clock.new
+    $text      = Text.new 'game/media/font/Arial_36_yellow_blackout_0.png'
     $cursor    = Cursor.new
     $camera    = Camera.new
     $smoke     = Smoke.new
@@ -51,7 +53,7 @@ class Main
     @queue       = EventQueue.new
     @queue.enable_new_style_events
 
-    glClearColor 0.0, 0.0, 0.0, 0.0
+    glClearColor 0.0, 0.0, 0.0, 1.0
     resize 800, 600
 
     @game = Game.new
@@ -109,6 +111,8 @@ class Main
   end
 
   def draw
+    #ObjectSpace.garbage_collect
+
     glViewport 0, 0, 800, 600
     glMatrixMode GL_PROJECTION
     glLoadIdentity
@@ -119,7 +123,11 @@ class Main
 
     @game.draw
 
+    $text.print 10, 10, ('FPS ' + $clock.framerate.truncate.to_s)
+
     GL.swap_buffers
+
+    $screen.title = 'FPS: ' + $clock.framerate.truncate.to_s
   end
 
 end
