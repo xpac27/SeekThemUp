@@ -83,7 +83,7 @@ class Quadtree
 
     if @is_leaf
       # grab all items at this level that overlaps the rect
-      hits += @itemList.select{|item| (item.box != rect and (item.box.overlaps?(rect) or item.box.meeted?(rect)))}
+      hits += @itemList.select{|item| (item.box != rect and (item.box.overlaps?(rect) or item.box.colided?(rect)))}
     else
       # recursively check for lower quadrans
       hits += @nw_quad.hit(rect) if (rect.left <= @area.x and rect.top <= @area.y)

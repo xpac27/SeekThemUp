@@ -1,6 +1,6 @@
 class Rect
 
-  attr_reader :x, :y, :px, :py, :top, :right, :bottom, :left, :width, :height
+  attr_reader :x, :y, :px, :py, :top, :right, :bottom, :left, :width, :height, :alf_heIght, :alf_width
 
   def initialize x, y, width, height
     @x = @px = x
@@ -111,31 +111,33 @@ class Rect
     (rect.right >= @left and rect.left <= @right and rect.bottom >= @top and rect.top <= @bottom)
   end
 
-  def meeted?(rect)
-    # create a new rect representing this one at the previous tick
-    prev = Rect.new @px, @py, @width, @height
-
-    # define trajectories from each of this rect's corners to the previous rect's oposit corners
-    points = [
-      {:x => @left,  :y => @top,    :px => prev.bottom, :py => prev.right},
-      {:x => @right, :y => @top,    :px => prev.left,   :py => prev.bottom},
-      {:x => @left,  :y => @bottom, :px => prev.right,  :py => prev.top},
-      {:x => @right, :y => @bottom, :px => prev.left,   :py => prev.top},
-    ]
-
-    # test each trajectories against the rect's center's trajectory
-    points.each{|p|
-      s1x = p[:x] - p[:px];
-      s1y = p[:y] - p[:py];
-      s2x = rect.x - rect.px;
-      s2y = rect.y - rect.py;
-      s = (-s1y*(p[:px]-rect.px) + s1x*(p[:py]-rect.py)) / (-s2x*s1y + s1x*s2y);
-      t = ( s2x*(p[:py]-rect.py) - s2y*(p[:px]-rect.px)) / (-s2x*s1y + s1x*s2y);
-
-      # did the trajectories crossed ?
-      return (s >= 0 and s <= 1 and t >= 0 and t <= 1)
+  def colided?(rect)
+    direction = [rect.px, rect.py, rect.x - (self.x-self.px), rect.y - (self.y-self.py)]
+    left      = self.px - self.alf_width
+    right     = self.px + self.alf_width
+    top       = self.py - self.alf_width
+    bottom    = self.py + self.alf_width
+    [
+      [left,  top,    right, top   ],
+      [right, top,    right, bottom],
+      [left,  bottom, left,  top   ],
+      [right, bottom, left,  bottom],
+    ].each{|p|
+      return true if (segments_colide? p[0], p[1], p[2], p[3], direction[0], direction[1], direction[2], direction[3])
     }
-    return false
+  end
+
+  #TODO put this in a Segement class using a Vector class
+  def segments_colide? ax, ay, bx, by, cx, cy, dx, dy
+      return if (ax == bx and ay == by)
+      return if (cx == dx and cy == dy)
+      s1x = ax-bx;
+      s1y = ay-by;
+      s2x = cx-dx;
+      s2y = cy-dy;
+      s = (-s1y*(bx-dx) + s1x*(by-dy)) / (-s2x*s1y + s1x*s2y);
+      t = ( s2x*(by-dy) - s2y*(bx-dx)) / (-s2x*s1y + s1x*s2y);
+      return (s >= 0 and s <= 1 and t >= 0 and t <= 1)
   end
 
   def nw_quadrant

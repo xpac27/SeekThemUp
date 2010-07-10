@@ -51,6 +51,16 @@ class Game
           @active_keys.push event.key
         when KeyReleased
           @active_keys.delete event.key
+        when MousePressed
+          @click = true
+        when MouseReleased
+          @click = false
+          @ball1_clicked = false
+          @ball2_clicked = false
+          @click_locked = false
+        when MouseMoved
+          @mousex = event.pos[0]
+          @mousey = event.pos[1]
       end
     end
   end
@@ -85,6 +95,10 @@ class Game
   end
 
   def update
+    #######################
+    # METHOD 1
+    #######################
+
     pt0x = @ball1_x
     pt0y = @ball1_y
     pt1x = @ball1_px
@@ -102,16 +116,48 @@ class Game
     s = (-s1y*(pt0x-pt2x) + s1x*(pt0y-pt2y)) / (-s2x*s1y + s1x*s2y);
     t = ( s2x*(pt0y-pt2y) - s2y*(pt0x-pt2x)) / (-s2x*s1y + s1x*s2y);
 
+    if (s >= 0 and s <= 1 and t >= 0 and t <= 1)
+      puts 'method 1 OK'
+    else
+      puts 'method 1 ...'
+    end
+
     @collision_x = pt0x + t*s1x
     @collision_y = pt0y + t*s1y
 
     @ball2_tx = pt2x + t*s2x
     @ball2_ty = pt2y + t*s2y
 
-    puts 's:' + s.to_s + ' / t:' + t.to_s
 
-    move_point1
-    move_point2
+    #######################
+    # METHOD 2
+    #######################
+
+    @direction = {
+      :px => @ball2_px,
+      :py => @ball2_py,
+      :x  => @ball2_x - (@ball1_x - @ball1_px),
+      :y  => @ball2_y - (@ball1_y - @ball1_py)
+    }
+
+    #move_point1
+    #move_point2
+    check_mouse
+  end
+
+  def check_mouse
+    if @ball1_clicked or (!@click_locked and @click and Math.sqrt((@ball1_x - @mousex)**2 + (@ball1_y - @mousey)**2) < 20)
+      @ball1_x = @mousex
+      @ball1_y = @mousey
+      @ball1_clicked = true
+      @click_locked = true
+    end
+    if @ball2_clicked or (!@click_locked and @click and Math.sqrt((@ball2_x - @mousex)**2 + (@ball2_y - @mousey)**2) < 20)
+      @ball2_x = @mousex
+      @ball2_y = @mousey
+      @ball2_clicked = true
+      @click_locked = true
+    end
   end
 
   def move_point1
@@ -157,6 +203,8 @@ class Game
 
     glColor3f 1, 0, 0
     draw_point @ball1_x, @ball1_y
+    glColor3f 0.2, 0, 0
+    draw_big_point @ball1_px, @ball1_py
     glColor3f 0.5, 0, 0
     draw_point @ball1_px, @ball1_py
     draw_line @ball1_x, @ball1_y, @ball1_px, @ball1_py
@@ -173,6 +221,10 @@ class Game
     glColor3f 1, 1, 1
     draw_point @collision_x, @collision_y
 
+
+    glColor3f 1, 1, 1
+    draw_line @direction[:x], @direction[:y], @direction[:px], @direction[:py]
+
     GL.swap_buffers
   end
 
@@ -185,6 +237,19 @@ class Game
         glVertex2i -5,  5
         glVertex2i -5, -5
         glVertex2i  5, -5
+      glEnd
+    glPopMatrix
+  end
+
+  def draw_big_point x, y
+    glPushMatrix
+      glTranslatef x, y, 0
+
+      glBegin GL_QUADS
+        glVertex2i  10,  10
+        glVertex2i -10,  10
+        glVertex2i -10, -10
+        glVertex2i  10, -10
       glEnd
     glPopMatrix
   end
