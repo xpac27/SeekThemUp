@@ -26,8 +26,11 @@ class Camera
     @box.y = @y
   end
 
-  def draw
+  def draw_background
     @background.draw self
+  end
+
+  def draw_characters
     @characters.each {|item|
       draw_this item
     }

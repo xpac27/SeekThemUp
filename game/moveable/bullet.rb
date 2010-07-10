@@ -2,8 +2,8 @@ class Bullet < Moveable
 
   def initialize x, y, size
     super x, y, size
-    @speed = 20
-    @acceleration = 20
+    @speed = 15
+    @acceleration = 15
     @friction = 0
   end
 

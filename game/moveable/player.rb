@@ -1,14 +1,16 @@
 class Player < Moveable
 
-  attr_reader :bullet_list
+  attr_reader :bullet_list, :energy
 
   def initialize
     super 0, 0, 16
+    @energy       = 5
     @speed        = 6
     @acceleration = 0.24
     @friction     = 0.10
     @bullet_list  = []
     @latest_shoot = 0
+    $gui.set_info('energy', @energy)
   end
 
   def draw
@@ -27,22 +29,22 @@ class Player < Moveable
 
   def move_up
     translate 0, -1
-    $smoke.generate self, 8, 12, 0, 1.5
+    $smoke.generate self, 8, 25, 0, 1
   end
 
   def move_down
     translate 0, 1
-    $smoke.generate self, 8, 12, 0, -1.5
+    $smoke.generate self, 8, 25, 0, -1
   end
 
   def move_left
     translate -1, 0
-    $smoke.generate self, 8, 12, 1.5, 0
+    $smoke.generate self, 8, 25, 1, 0
   end
 
   def move_right
     translate 1, 0
-    $smoke.generate self, 8, 12, -1.5, 0
+    $smoke.generate self, 8, 25, -1, 0
   end
 
   def shoot
@@ -57,6 +59,16 @@ class Player < Moveable
     bullet.translate dx, dy
     @bullet_list += [bullet]
     @latest_shoot = $clock.lifetime
+  end
+
+  def gain_energy
+    @energy += 1
+    $gui.set_info('energy', @energy)
+  end
+
+  def loose_energy
+    @energy -= 1
+    $gui.set_info('energy', @energy)
   end
 
 end

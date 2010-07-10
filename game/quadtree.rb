@@ -78,18 +78,18 @@ class Quadtree
     glPopMatrix
   end
 
-  def hit(rect)
+  def hit(rect, strict=true)
     hits = []
 
     if @is_leaf
       # grab all items at this level that overlaps the rect
-      hits += @itemList.select{|item| (item.box != rect and (item.box.overlaps?(rect) or item.box.colided?(rect)))}
+      hits += @itemList.select{|item| (item.box != rect and (item.box.overlaps?(rect) or (strict and item.box.colided?(rect))))}
     else
       # recursively check for lower quadrans
-      hits += @nw_quad.hit(rect) if (rect.left <= @area.x and rect.top <= @area.y)
-      hits += @sw_quad.hit(rect) if (rect.left <= @area.x and rect.bottom >= @area.y)
-      hits += @ne_quad.hit(rect) if (rect.right >= @area.x and rect.top <= @area.y)
-      hits += @se_quad.hit(rect) if (rect.right >= @area.x and rect.bottom >= @area.y)
+      hits += @nw_quad.hit(rect, strict) if (rect.left <= @area.x and rect.top <= @area.y)
+      hits += @sw_quad.hit(rect, strict) if (rect.left <= @area.x and rect.bottom >= @area.y)
+      hits += @ne_quad.hit(rect, strict) if (rect.right >= @area.x and rect.top <= @area.y)
+      hits += @se_quad.hit(rect, strict) if (rect.right >= @area.x and rect.bottom >= @area.y)
     end
 
 #    @area.draw(0x11FFFFFF) if @area

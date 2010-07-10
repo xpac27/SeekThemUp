@@ -4,8 +4,8 @@ class Puff < Moveable
     super x, y, rand(size) + size/4
     @life         = life
     @age          = 0.0
-    @speed        = 10
-    @acceleration = 8
+    @speed        = 20
+    @acceleration = 12
     @friction     = 3
   end
 
@@ -19,7 +19,7 @@ class Puff < Moveable
   end
 
   def draw
-    glColor3f 0.2, 0.2, 0.2
+    glColor4f 0.2, 0.2, 0.2, 0.2
     @box.draw
   end
 

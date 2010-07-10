@@ -50,12 +50,15 @@ class Game
     }
 
     @quadtree_enemy.update(@enemy_list, $camera.box)
-    @quadtree_enemy.hit(@player.box).each {|enemy|
+    @quadtree_enemy.hit(@player.box, false).each {|enemy|
       $camera.shake 5
+      @player.loose_energy
       break
     }
     @player.bullet_list.each {|bullet|
       @quadtree_enemy.hit(bullet.box).each {|enemy|
+        bullet.x = enemy.x
+        bullet.y = enemy.y
         $explosion.generate bullet, 2, 20
         $camera.shake 3
         $camera.remove_character enemy
@@ -69,19 +72,21 @@ class Game
     }
 
     @quadtree_energy.update(@energy_list, $camera.box, 0, @player)
-    @quadtree_energy.hit(@player.box).each {|energy|
+    @quadtree_energy.hit(@player.box, false).each {|energy|
       $camera.remove_character energy
       @energy_list.delete energy
-      break
+      @player.gain_energy
     }
   end
 
   def draw
-    $camera.draw
+    $camera.draw_background
     $smoke.draw
+    $camera.draw_characters
     $explosion.draw
     #@quadtree_enemy.draw 0.2, 0, 0
     #@quadtree_energy.draw 0, 0, 0.2
+    $gui.draw
   end
 
 end

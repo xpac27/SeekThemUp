@@ -116,12 +116,6 @@ class Game
     s = (-s1y*(pt0x-pt2x) + s1x*(pt0y-pt2y)) / (-s2x*s1y + s1x*s2y);
     t = ( s2x*(pt0y-pt2y) - s2y*(pt0x-pt2x)) / (-s2x*s1y + s1x*s2y);
 
-    if (s >= 0 and s <= 1 and t >= 0 and t <= 1)
-      puts 'method 1 OK'
-    else
-      puts 'method 1 ...'
-    end
-
     @collision_x = pt0x + t*s1x
     @collision_y = pt0y + t*s1y
 

@@ -7,6 +7,7 @@ require 'glu'
 require 'rubygame/sfont'
 
 require 'game'
+require 'game/gui'
 require 'game/rect'
 require 'game/text'
 require 'game/moveable'
@@ -37,8 +38,9 @@ class Main
 
   def initialize
     $screen    = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
-    $clock     = Clock.new
     $text      = Text.new 'game/media/font/Arial_36_yellow_blackout_0.png'
+    $gui       = Gui.new
+    $clock     = Clock.new
     $cursor    = Cursor.new
     $camera    = Camera.new
     $smoke     = Smoke.new
@@ -54,6 +56,8 @@ class Main
     @queue.enable_new_style_events
 
     glClearColor 0.0, 0.0, 0.0, 1.0
+    glEnable GL_BLEND
+    glBlendFunc GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
     resize 800, 600
 
     @game = Game.new
@@ -122,8 +126,6 @@ class Main
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
     @game.draw
-
-    $text.print 10, 10, ('FPS ' + $clock.framerate.truncate.to_s)
 
     GL.swap_buffers
 
