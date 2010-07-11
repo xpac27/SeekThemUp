@@ -12,5 +12,10 @@ class Bullet < Moveable
     @box.draw
   end
 
+  def explode
+    $explosion.generate self, 2, 20, :red
+    $camera.shake 3
+  end
+
 end
 

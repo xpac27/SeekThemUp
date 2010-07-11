@@ -68,6 +68,8 @@ class Player < Moveable
 
   def loose_energy
     @energy -= 1
+    $explosion.generate self, 2, 2, :white
+    $camera.shake 5
     $gui.set_info('energy', @energy)
   end
 

@@ -12,6 +12,7 @@ require 'game/rect'
 require 'game/text'
 require 'game/moveable'
 require 'game/world'
+require 'game/map'
 require 'game/camera'
 require 'game/cursor'
 require 'game/smoke'
@@ -38,7 +39,7 @@ class Main
 
   def initialize
     $screen    = Screen.new [800, 600], 0, [HWSURFACE, DOUBLEBUF, OPENGL]
-    $text      = Text.new 'game/media/font/Arial_36_yellow_blackout_0.png'
+    $text      = Text.new 'game/media/font/term16.png'
     $gui       = Gui.new
     $clock     = Clock.new
     $cursor    = Cursor.new

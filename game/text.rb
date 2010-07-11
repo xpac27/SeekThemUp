@@ -1,13 +1,13 @@
 class Text
 
   def initialize file
-    sfont = SFont.new 'game/media/font/term16.png'
+    sfont = SFont.new file
     @letters = {}
 
     SFont::default_glyphs.each{|item|
       surface = sfont.render(item)
-      surface.set_colorkey [0,0,0,255]
-      surface = surface.to_display
+      #surface.set_colorkey [0,0,0,255]     # attempt to force colorkey
+      #surface = surface.to_display_alpha   # attempt to force alpha
       @letters[item] = {
         :surface => surface,
         :width   => sfont.string_width(item)

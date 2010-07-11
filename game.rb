@@ -4,22 +4,16 @@ class Game
     @quadtree_enemy  = Quadtree.new
     @quadtree_energy = Quadtree.new
     @world           = World.new
+    @map             = Map.new 400
     @player          = Player.new
     @energy_list     = []
     @enemy_list      = []
-    200.times {
-      enemy              = Enemy.new(100, 100, 8)
-      enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
-      enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015
-      enemy.friction     = (rand(100) / 100.0) * 0.01 + 0.002
-      enemy.player       = @player
-      @enemy_list += [enemy]
-    }
 
     #@player.set_texture 'game/media/player.png'
 
     $camera.set_subject @player
     $camera.set_background @world
+    $camera.append_character @map
     $camera.append_character @player
     $camera.append_character @enemy_list
   end
@@ -49,35 +43,8 @@ class Game
       item.update
     }
 
-    @quadtree_enemy.update(@enemy_list, $camera.box)
-    @quadtree_enemy.hit(@player.box, false).each {|enemy|
-      $explosion.generate @player, 2, 2, :white
-      $camera.shake 5
-      @player.loose_energy
-      break
-    }
-    @player.bullet_list.each {|bullet|
-      @quadtree_enemy.hit(bullet.box).each {|enemy|
-        bullet.x = enemy.x
-        bullet.y = enemy.y
-        $explosion.generate bullet, 2, 20, :red
-        $camera.shake 3
-        $camera.remove_character enemy
-        @enemy_list.delete enemy
-        @player.bullet_list.delete bullet
-        energy = Energy.new enemy.x, enemy.y, @player
-        $camera.prepend_character energy
-        @energy_list += [energy]
-        break
-      }
-    }
-
-    @quadtree_energy.update(@energy_list, $camera.box, 0, @player)
-    @quadtree_energy.hit(@player.box, false).each {|energy|
-      $camera.remove_character energy
-      @energy_list.delete energy
-      @player.gain_energy
-    }
+    check_collisions
+    check_map
   end
 
   def draw
@@ -88,6 +55,67 @@ class Game
     #@quadtree_enemy.draw 0.2, 0, 0
     #@quadtree_energy.draw 0, 0, 0.2
     $gui.draw
+  end
+
+  def check_collisions
+    # Player against enemies
+    @quadtree_enemy.update(@enemy_list, $camera.box)
+    @quadtree_enemy.hit(@player.box, false).each {|enemy|
+      @player.loose_energy
+      break
+    }
+
+    # Bullets against enemies
+    @player.bullet_list.each {|bullet|
+      @quadtree_enemy.hit(bullet.box).each {|enemy|
+        add Energy.new(enemy.x, enemy.y, @player)
+        bullet.explode
+        remove enemy
+        remove bullet
+        break
+      }
+    }
+
+    # Player against energy
+    @quadtree_energy.update(@energy_list, $camera.box, 0, @player)
+    @quadtree_energy.hit(@player.box, false).each {|energy|
+      @player.gain_energy
+      remove energy
+    }
+  end
+
+  def check_map
+    if not @map.is_discoverd @player.x, @player.y
+      add @map.generate_enemies @player.x, @player.y
+    end
+  end
+
+  def remove item
+    case item.class.to_s
+      when 'Array'
+        item.each{|e| remove e}
+      when 'Energy'
+        $camera.remove_character item
+        @energy_list.delete item
+      when 'Enemy'
+        $camera.remove_character item
+        @enemy_list.delete item
+      when 'Bullet'
+        @player.bullet_list.delete item
+    end
+  end
+
+  def add item
+    case item.class.to_s
+      when 'Array'
+        item.each{|e| add e}
+      when 'Energy'
+        $camera.prepend_character item
+        @energy_list += [item]
+      when 'Enemy'
+        $camera.append_character item
+        @enemy_list += [item]
+    end
   end
 
 end

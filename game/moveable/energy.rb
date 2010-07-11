@@ -5,11 +5,14 @@ class Energy < Moveable
     @speed        = 100
     @acceleration = 0.1
     @friction     = 0.05
-    @subject = subject
+    @subject      = subject
+    @locked       = false
   end
 
   def update
-    if distance_to(@subject) < 150
+    if not @locked
+      @locked = true if distance_to(@subject) < 150
+    else
       translate(@subject.x - @x, @subject.y - @y)
     end
     super
