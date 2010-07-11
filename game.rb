@@ -51,8 +51,8 @@ class Game
     $smoke.draw
     $camera.draw_characters
     $explosion.draw
-    @quadtree_enemy.draw 0.2, 0, 0
-    @quadtree_energy.draw 0, 0, 0.2
+    #@quadtree_enemy.draw 0.2, 0, 0
+    #@quadtree_energy.draw 0, 0, 0.2
     $gui.draw
   end
 
