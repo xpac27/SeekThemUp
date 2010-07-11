@@ -6,20 +6,23 @@ class Map
     @alf_scale  = scale / 2
   end
 
-  def draw
-    @discovered.each_key{|key|
-      data = key.split 'x'
-      glPushMatrix
-        glTranslatef data[0].to_i * @scale, data[1].to_i * @scale, 0
-        glColor4f 1, 1, 1, 0.1
-        glBegin GL_QUADS
-          glVertex2i    @alf_scale, -@alf_scale
-          glVertex2i    @alf_scale,  @alf_scale
-          glVertex2i   -@alf_scale,  @alf_scale
-          glVertex2i   -@alf_scale, -@alf_scale
-        glEnd
-      glPopMatrix
-    }
+  def draw_from camera
+    glPushMatrix
+      glTranslatef (-camera.x + 400), (-camera.y + 300), 0
+      @discovered.each_key{|key|
+        data = key.split 'x'
+        glPushMatrix
+          glTranslatef data[0].to_i * @scale, data[1].to_i * @scale, 0
+          glColor4f 1, 1, 1, 0.1
+          glBegin GL_QUADS
+            glVertex2i    @alf_scale, -@alf_scale
+            glVertex2i    @alf_scale,  @alf_scale
+            glVertex2i   -@alf_scale,  @alf_scale
+            glVertex2i   -@alf_scale, -@alf_scale
+          glEnd
+        glPopMatrix
+      }
+    glPopMatrix
   end
 
   def get_key x, y
@@ -56,8 +59,8 @@ class Map
 
   def generate_enemies x, y
     enemies  = []
-    position = get_random_position x, y
     get_difficulty(x, y).times {
+      position = get_random_position x, y
       enemy              = Enemy.new(position[0], position[1], 8)
       enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
       enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015

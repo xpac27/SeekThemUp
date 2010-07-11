@@ -108,7 +108,6 @@ class Rect
   end
 
   def touch?(rect)
-    return true if
     (
       (@top >= rect.top and @top <= rect.bottom) or
       (@bottom >= rect.top and @bottom <= rect.bottom) or

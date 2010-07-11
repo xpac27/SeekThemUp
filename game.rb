@@ -12,10 +12,9 @@ class Game
     #@player.set_texture 'game/media/player.png'
 
     $camera.set_subject @player
-    $camera.set_background @world
-    $camera.append_character @map
+    $camera.add_background @world
+    $camera.add_background @map
     $camera.append_character @player
-    $camera.append_character @enemy_list
   end
 
   def handle_keys list
@@ -52,8 +51,8 @@ class Game
     $smoke.draw
     $camera.draw_characters
     $explosion.draw
-    #@quadtree_enemy.draw 0.2, 0, 0
-    #@quadtree_energy.draw 0, 0, 0.2
+    @quadtree_enemy.draw 0.2, 0, 0
+    @quadtree_energy.draw 0, 0, 0.2
     $gui.draw
   end
 

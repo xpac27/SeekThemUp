@@ -1,8 +1,8 @@
 class World
 
-  def draw from_camera
+  def draw_from camera
     glPushMatrix
-      glTranslatef (from_camera.x%32)*-1, (from_camera.y%32)*-1, 0
+      glTranslatef (camera.x%32)*-1, (camera.y%32)*-1, 0
 
       # grey background
       glColor3f 0.1, 0.1, 0.1

@@ -25,12 +25,16 @@ class Quadtree
       se_items = []
       sw_items = []
       items.each do |item|
+        # ignore if not in the area of the quadtree
+        next unless item.box.overlaps? @area
+
         # Which of the sub-quadrants does the item overlap?
         in_nw = (item.box.left <= @area.x and item.box.top <= @area.y)
         in_ne = (item.box.right >= @area.x and item.box.top <= @area.y)
         in_se = (item.box.right >= @area.x and item.box.bottom >= @area.y)
         in_sw = (item.box.left <= @area.x and item.box.bottom >= @area.y)
 
+        # list items
         nw_items += [item] if in_nw
         ne_items += [item] if in_ne
         se_items += [item] if in_se

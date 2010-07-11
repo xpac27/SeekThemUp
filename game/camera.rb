@@ -6,6 +6,7 @@ class Camera
     @x = 0
     @y = 0
     @characters = []
+    @backgrounds = []
     @box = Rect.new @x, @y, 800, 600
   end
 
@@ -27,7 +28,7 @@ class Camera
   end
 
   def draw_background
-    @background.draw self
+    @backgrounds.each{|item| item.draw_from self}
   end
 
   def draw_characters
@@ -37,6 +38,7 @@ class Camera
   end
 
   def draw_this item
+    return unless is_visible? item
     glPushMatrix
       glTranslatef (-@x + 400), (-@y + 300), 0
       item.draw
@@ -47,8 +49,8 @@ class Camera
     @subject = item
   end
 
-  def set_background item
-    @background = item
+  def add_background item
+    @backgrounds << item
   end
 
   def append_character item
@@ -77,6 +79,10 @@ class Camera
   end
 
   def is_visible? item
+    item.box.touch? @box
+  end
+
+  def is_fully_visible? item
     item.box.overlaps? @box
   end
 
