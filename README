@@ -1,0 +1,32 @@
+SeekThemUp is a Shoot them up game developed in Ruby using Rubygame and OpenGL.
+
+It's more a little experimentation than a real game project, but it might get fun to play ^^
+
+
+HOW_TO_INSTALL?
+
+- install ruby game: http://rubygame.org/wiki/Installation_Instructions
+- install ruby-opengl: gem install ruby-opengl
+- use the "Switch Tags" menu to select a revision or stay on the bleeding edge
+- git-clone SeekThemUp using the read-only git url: git clone git://github.com/xpac27/SeekThemUp.git
+
+
+HOW_TO_PLAY?
+
+- go in the SeekThemUp folder and type: ./run.bash
+- use WASD keys to move your ship and your mouse's pointer to shoot!
+
+
+REVISION_LIST
+
+v0.1: core base done, the game is playable (current version)
+v0.2: weapon system done
+v0.3: advenced enemy behavior
+v0.4: better graphics
+
+
+NOTES
+
+You might see strange outputs or outlines (they are trailing debugs or bugs).
+The game is far from being done but still ... you can test :)
+Feel free to give me feedbacks by sending me a message, or to contribute.
