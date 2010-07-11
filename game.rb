@@ -51,6 +51,7 @@ class Game
 
     @quadtree_enemy.update(@enemy_list, $camera.box)
     @quadtree_enemy.hit(@player.box, false).each {|enemy|
+      $explosion.generate @player, 2, 2, :white
       $camera.shake 5
       @player.loose_energy
       break
@@ -59,7 +60,7 @@ class Game
       @quadtree_enemy.hit(bullet.box).each {|enemy|
         bullet.x = enemy.x
         bullet.y = enemy.y
-        $explosion.generate bullet, 2, 20
+        $explosion.generate bullet, 2, 20, :red
         $camera.shake 3
         $camera.remove_character enemy
         @enemy_list.delete enemy

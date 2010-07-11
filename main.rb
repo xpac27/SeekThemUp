@@ -129,7 +129,7 @@ class Main
 
     GL.swap_buffers
 
-    $screen.title = 'FPS: ' + $clock.framerate.truncate.to_s
+    $screen.title = 'FPS: ' + $clock.framerate.to_i.to_s
   end
 
 end

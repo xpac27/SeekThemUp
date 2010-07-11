@@ -21,14 +21,10 @@ class Explosion
     }
   end
 
-  def generate subject, size, amount
+  def generate subject, size, amount, color
     amount.times {
-      projectil = Projectil.new subject.x, subject.y, size
-      projectil.velocity = subject.velocity
-      projectil.velocity[0] /= rand(10) + 5
-      projectil.velocity[1] /= rand(10) + 5
-      projectil.velocity[0] -= rand(8) - 4
-      projectil.velocity[1] -= rand(8) - 4
+      projectil = Projectil.new subject.x, subject.y, size, color
+      projectil.base_velocity_on subject
       @projectils[@projectilTotal] = projectil
       @projectilTotal += 1
     }

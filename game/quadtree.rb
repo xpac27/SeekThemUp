@@ -82,8 +82,8 @@ class Quadtree
     hits = []
 
     if @is_leaf
-      # grab all items at this level that overlaps the rect
-      hits += @itemList.select{|item| (item.box != rect and (item.box.overlaps?(rect) or (strict and item.box.colided?(rect))))}
+      # grab all items at this level that touch the rect
+      hits += @itemList.select{|item| (item.box != rect and (item.box.touch?(rect) or (strict and item.box.colided?(rect))))}
     else
       # recursively check for lower quadrans
       hits += @nw_quad.hit(rect, strict) if (rect.left <= @area.x and rect.top <= @area.y)
@@ -101,15 +101,12 @@ class Quadtree
     @itemList.each_index{|i|
       @itemList[i + 1, @itemList.length].each{|item|
         if @itemList[i].box.overlaps?(item.box)
-          Debug::count('colision')
-          @itemList[i].overlaps = true
-          item.overlaps = true
+          #TODO fire a method on both items
         end
       }
     }
 
 #    @area.draw(0x11FFFFFF) if @area
-    Debug::count('area checked')
 
     unless @is_leaf
       @nw_quad.check_colision

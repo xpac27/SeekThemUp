@@ -5,9 +5,9 @@ class Player < Moveable
   def initialize
     super 0, 0, 16
     @energy       = 5
-    @speed        = 6
-    @acceleration = 0.24
-    @friction     = 0.10
+    @speed        = 5
+    @acceleration = 0.60
+    @friction     = 0.30
     @bullet_list  = []
     @latest_shoot = 0
     $gui.set_info('energy', @energy)

@@ -1,6 +1,6 @@
 class Rect
 
-  attr_reader :x, :y, :px, :py, :top, :right, :bottom, :left, :width, :height, :alf_heIght, :alf_width
+  attr_reader :x, :y, :px, :py, :top, :right, :bottom, :left, :width, :height, :alf_height, :alf_width
 
   def initialize x, y, width, height
     @x = @px = x
@@ -107,16 +107,29 @@ class Rect
     set_height(@bottom - @top)
   end
 
+  def touch?(rect)
+    return true if
+    (
+      (@top >= rect.top and @top <= rect.bottom) or
+      (@bottom >= rect.top and @bottom <= rect.bottom) or
+      (@top < rect.top and @bottom > rect.bottom)
+    ) and (
+      (@left >= rect.left and @left <= rect.right) or
+      (@right >= rect.left and @right <= rect.right) or
+      (@left < rect.left and @right > rect.right)
+    )
+  end
+
   def overlaps?(rect)
     (rect.right >= @left and rect.left <= @right and rect.bottom >= @top and rect.top <= @bottom)
   end
 
   def colided?(rect)
-    direction = [rect.px, rect.py, rect.x - (self.x-self.px), rect.y - (self.y-self.py)]
-    left      = self.px - self.alf_width
-    right     = self.px + self.alf_width
-    top       = self.py - self.alf_width
-    bottom    = self.py + self.alf_width
+    direction = [rect.px, rect.py, rect.x - (@x-@px), rect.y - (@y-@py)]
+    left      = @px - @alf_width - rect.alf_width
+    right     = @px + @alf_width + rect.alf_width
+    top       = @py - @alf_height - rect.alf_height
+    bottom    = @py + @alf_height + rect.alf_height
     [
       [left,  top,    right, top   ],
       [right, top,    right, bottom],
@@ -125,12 +138,13 @@ class Rect
     ].each{|p|
       return true if (segments_colide? p[0], p[1], p[2], p[3], direction[0], direction[1], direction[2], direction[3])
     }
+    return false
   end
 
   #TODO put this in a Segement class using a Vector class
   def segments_colide? ax, ay, bx, by, cx, cy, dx, dy
-      return if (ax == bx and ay == by)
-      return if (cx == dx and cy == dy)
+      return false if (ax == bx and ay == by)
+      return false if (cx == dx and cy == dy)
       s1x = ax-bx;
       s1y = ay-by;
       s2x = cx-dx;

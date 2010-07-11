@@ -89,12 +89,41 @@ class Game
       handle_events
       handle_keys
       update
-      draw
       break unless @running
     end
   end
 
   def update
+    glViewport 0, 0, 800, 600
+    glMatrixMode GL_PROJECTION
+    glLoadIdentity
+    glOrtho 0, 800, 600, 0, -1, 1
+    glMatrixMode GL_MODELVIEW
+    glLoadIdentity
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+    glColor3f 1, 0, 0
+    draw_point @ball1_x, @ball1_y
+    #glColor3f 0.2, 0, 0
+    #draw_big_point @ball1_px, @ball1_py
+    glColor3f 0.5, 0, 0
+    #draw_point @ball1_px, @ball1_py
+    draw_line @ball1_x, @ball1_y, @ball1_px, @ball1_py
+
+    glColor3f 0, 0, 1
+    draw_point @ball2_x, @ball2_y
+    glColor3f 0, 0, 0.5
+    draw_point @ball2_px, @ball2_py
+    draw_line @ball2_x, @ball2_y, @ball2_px, @ball2_py
+
+    glColor3f 1, 1, 0
+    draw_point @ball2_tx, @ball2_ty
+
+    glColor3f 1, 1, 1
+    draw_point @collision_x, @collision_y
+
+
+
     #######################
     # METHOD 1
     #######################
@@ -127,6 +156,8 @@ class Game
     # METHOD 2
     #######################
 
+    ok = false
+
     @direction = {
       :px => @ball2_px,
       :py => @ball2_py,
@@ -134,9 +165,51 @@ class Game
       :y  => @ball2_y - (@ball1_y - @ball1_py)
     }
 
+    glColor3f 1, 1, 1
+    draw_line @direction[:x], @direction[:y], @direction[:px], @direction[:py]
+
+    left      = @ball1_px - 5 - 5
+    right     = @ball1_px + 5 + 5
+    top       = @ball1_py - 5 - 5
+    bottom    = @ball1_py + 5 + 5
+    [
+      [left,  top,    right, top   ],
+      [right, top,    right, bottom],
+      [left,  bottom, left,  top   ],
+      [right, bottom, left,  bottom],
+    ].each{|p|
+      glColor3f 0.6, 0.6, 0.6
+      draw_line p[0], p[1], p[2], p[3]
+      if (segments_colide? p[0], p[1], p[2], p[3], @direction[:x], @direction[:y], @direction[:px], @direction[:py])
+        ok = true
+        break
+      end
+    }
+
+    if ok
+      puts 'METHOD 2 OK'
+    else
+      puts 'METHOD 2 ...'
+    end
+
+    GL.swap_buffers
+
     #move_point1
     #move_point2
     check_mouse
+  end
+
+  def segments_colide? ax, ay, bx, by, cx, cy, dx, dy
+      #puts ax.to_s + 'x' + ay.to_s + ' >> ' + bx.to_s + 'x' + by.to_s + ' || ' + cx.to_s + 'x' + cy.to_s + ' >> ' + dx.to_s + 'x' + dy.to_s
+      return false if (ax == bx and ay == by)
+      return false if (cx == dx and cy == dy)
+      s1x = ax-bx;
+      s1y = ay-by;
+      s2x = cx-dx;
+      s2y = cy-dy;
+      s = (-s1y*(bx-dx) + s1x*(by-dy)) / (-s2x*s1y + s1x*s2y);
+      t = ( s2x*(by-dy) - s2y*(bx-dx)) / (-s2x*s1y + s1x*s2y);
+      return (s >= 0 and s <= 1 and t >= 0 and t <= 1)
   end
 
   def check_mouse
@@ -184,42 +257,6 @@ class Game
       when 6 then @ball2_x -= s
       when 7 then @ball2_x -= s; @ball2_y -= s;
     end
-  end
-
-  def draw
-    glViewport 0, 0, 800, 600
-    glMatrixMode GL_PROJECTION
-    glLoadIdentity
-    glOrtho 0, 800, 600, 0, -1, 1
-    glMatrixMode GL_MODELVIEW
-    glLoadIdentity
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-    glColor3f 1, 0, 0
-    draw_point @ball1_x, @ball1_y
-    glColor3f 0.2, 0, 0
-    draw_big_point @ball1_px, @ball1_py
-    glColor3f 0.5, 0, 0
-    draw_point @ball1_px, @ball1_py
-    draw_line @ball1_x, @ball1_y, @ball1_px, @ball1_py
-
-    glColor3f 0, 0, 1
-    draw_point @ball2_x, @ball2_y
-    glColor3f 0, 0, 0.5
-    draw_point @ball2_px, @ball2_py
-    draw_line @ball2_x, @ball2_y, @ball2_px, @ball2_py
-
-    glColor3f 1, 1, 0
-    draw_point @ball2_tx, @ball2_ty
-
-    glColor3f 1, 1, 1
-    draw_point @collision_x, @collision_y
-
-
-    glColor3f 1, 1, 1
-    draw_line @direction[:x], @direction[:y], @direction[:px], @direction[:py]
-
-    GL.swap_buffers
   end
 
   def draw_point x, y

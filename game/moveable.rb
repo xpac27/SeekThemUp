@@ -2,7 +2,6 @@
 class Moveable
 
   attr_reader   :box
-  attr_writer   :overlaps
   attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity
 
   def initialize x, y, size
@@ -20,7 +19,6 @@ class Moveable
   end
 
   def update
-    @overlaps = false
     @x = @box.x = @x + @velocity[0]
     @y = @box.y = @y + @velocity[1]
 
@@ -54,10 +52,6 @@ class Moveable
 
   def rotate(a)
     @angle += a
-  end
-
-  def velocity=(v)
-    @velocity = v.dup
   end
 
   def distance_to(item)
