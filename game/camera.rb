@@ -7,7 +7,7 @@ class Camera
     @y = 0
     @characters = []
     @backgrounds = []
-    @box = Rect.new @x, @y, 800, 600
+    @box = Box.new @x, @y, 800, 600
   end
 
   def update

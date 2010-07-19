@@ -65,7 +65,6 @@ class Map
       enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
       enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015
       enemy.friction     = (rand(100) / 100.0) * 0.01 + 0.002
-      enemy.player       = @player
       enemies << enemy
     }
     return enemies

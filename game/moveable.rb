@@ -1,40 +1,40 @@
-# TODO this should < Rect
+# TODO this should < Box
 class Moveable
 
   attr_reader   :box
-  attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity
+  attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity, :direction
 
   def initialize x, y, size
-    @x            = x
-    @y            = y
-    @tx           = 0
-    @ty           = 0
     @size         = size
-    @speed        = 1
+    @speed        = 1.0
     @acceleration = 0.4
     @friction     = 0.1
-    @velocity     = [0,0]
-    @angle        = 0
-    @box          = Rect.new @x, @y, @size, @size
+    @velocity     = 0.0
+    @move         = 0
+    @direction    = Vector.new(1.0, 0.0)
+    @box          = Box.new x, y, @size, @size
   end
 
-  def update
-    @x = @box.x = @x + @velocity[0]
-    @y = @box.y = @y + @velocity[1]
+  def x; @box.x; end
+  def y; @box.y; end
+  def x= value; @box.x = value; end
+  def y= value; @box.y = value; end
 
-    unless (@tx == 0 and @ty == 0)
-      @tx /= Math.sqrt(@tx**2 + @ty**2)
-      @ty /= Math.sqrt(@tx**2 + @ty**2)
-      @velocity[0] = @velocity[0] + @acceleration * @tx if @velocity[0].abs < @tx.abs * @speed
-      @velocity[1] = @velocity[1] + @acceleration * @ty if @velocity[1].abs < @ty.abs * @speed
-      @tx = 0
-      @ty = 0
+  def update
+    @box.x = @box.x + @velocity * @direction.x
+    @box.y = @box.y + @velocity * @direction.y
+
+    if @move != 0
+      @velocity = @velocity + @acceleration * @move if @velocity < @speed
+      @move = 0
     end
 
-    @velocity[0] = (@velocity[0] - @friction) if (@velocity[0] > 0)
-    @velocity[1] = (@velocity[1] - @friction) if (@velocity[1] > 0)
-    @velocity[0] = (@velocity[0] + @friction) if (@velocity[0] < 0)
-    @velocity[1] = (@velocity[1] + @friction) if (@velocity[1] < 0)
+    if (@velocity < @acceleration and @velocity > -@acceleration)
+      @velocity = 0
+    else
+      @velocity -= @friction if @velocity > 0
+      @velocity += @friction if @velocity < 0
+    end
   end
 
   def draw
@@ -45,13 +45,20 @@ class Moveable
     @box.set_texture file
   end
 
-  def translate(x, y)
-    @tx = x unless x == 0
-    @ty = y unless y == 0
+  def rotate(angle)
+    @box.set_angle @direction.get_angle
+    @direction.rotate(angle)
   end
 
-  def rotate(a)
-    @angle += a
+  def translate(x, y)
+  end
+
+  def move_forward
+    @move = 1
+  end
+
+  def move_backward
+    @move = -1
   end
 
   def distance_to(item)

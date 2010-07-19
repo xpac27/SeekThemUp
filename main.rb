@@ -4,11 +4,15 @@ require 'rubygame'
 require 'gl'
 require 'glu'
 
+include Gl
+include Glu
+
 require 'rubygame/sfont'
 
 require 'game'
 require 'game/gui'
-require 'game/rect'
+require 'game/vector'
+require 'game/box'
 require 'game/text'
 require 'game/moveable'
 require 'game/world'
@@ -18,16 +22,15 @@ require 'game/cursor'
 require 'game/smoke'
 require 'game/explosion'
 require 'game/quadtree'
+require 'game/shape'
+require 'game/shape/rectangle'
+require 'game/shape/triangle'
 require 'game/moveable/player'
 require 'game/moveable/enemy'
 require 'game/moveable/bullet'
 require 'game/moveable/puff'
 require 'game/moveable/projectil'
 require 'game/moveable/energy'
-
-
-include Gl
-include Glu
 
 include Rubygame
 include Rubygame::Events

@@ -7,6 +7,7 @@ class Energy < Moveable
     @friction     = 0.05
     @subject      = subject
     @locked       = false
+    @box.set_shape Rectangle.new
   end
 
   def update

@@ -1,8 +1,9 @@
 class Enemy < Moveable
 
-  attr_writer :player
-
-  @player
+  def initialize x, y, size
+    super x, y, size
+    @box.set_shape Rectangle.new
+  end
 
   def update
     @direction = rand(10) if rand(30) == 1

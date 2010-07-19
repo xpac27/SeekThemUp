@@ -10,6 +10,7 @@ class Player < Moveable
     @friction     = 0.30
     @bullet_list  = []
     @latest_shoot = 0
+    @box.set_shape Triangle.new
     $gui.set_info('energy', @energy)
   end
 
@@ -27,29 +28,21 @@ class Player < Moveable
     super
   end
 
-  def move_up
-    translate 0, -1
-    $smoke.generate self, 8, 25, 0, 1
-  end
-
-  def move_down
-    translate 0, 1
+  def move_forward
     $smoke.generate self, 8, 25, 0, -1
+    super
   end
 
-  def move_left
-    translate -1, 0
-    $smoke.generate self, 8, 25, 1, 0
+  def rotate_left
+    rotate -0.1
   end
 
-  def move_right
-    translate 1, 0
-    $smoke.generate self, 8, 25, -1, 0
+  def rotate_right
+    rotate 0.1
   end
 
   def shoot
     return unless $clock.lifetime - @latest_shoot > 100
-    @latest_shoot = 0
     dx = $cursor.x - @x
     dy = $cursor.y - @y
     mag = Math.sqrt(dx**2 + dy**2)

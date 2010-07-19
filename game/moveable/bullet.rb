@@ -2,9 +2,10 @@ class Bullet < Moveable
 
   def initialize x, y, size
     super x, y, size
-    @speed = 15
+    @speed        = 15
     @acceleration = 15
-    @friction = 0
+    @friction     = 0
+    @box.set_shape Rectangle.new
   end
 
   def draw

@@ -4,6 +4,7 @@ class Projectil < Moveable
     super x, y, size
     @color = color
     @alpha = 1.0
+    @box.set_shape Rectangle.new
   end
 
   def base_velocity_on subject
