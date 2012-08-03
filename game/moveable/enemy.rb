@@ -6,19 +6,7 @@ class Enemy < Moveable
   end
 
   def update
-    @direction = rand(10) if rand(30) == 1
-
-    case @direction
-      when 0 then translate(0, -1)
-      when 1 then translate(1, -1)
-      when 2 then translate(1, 0)
-      when 3 then translate(1, 1)
-      when 4 then translate(0, 1)
-      when 5 then translate(-1, 1)
-      when 6 then translate(-1, 0)
-      when 7 then translate(-1, -1)
-    end
-
+    translate(rand(2) - 1, rand(2) - 1) if rand(30) == 1
     super
   end
 

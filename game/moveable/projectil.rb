@@ -8,11 +8,9 @@ class Projectil < Moveable
   end
 
   def base_velocity_on subject
-    @velocity = subject.velocity.dup
-    @velocity[0] /= rand(8) + 4
-    @velocity[1] /= rand(8) + 4
-    @velocity[0] -= rand(8) - 4
-    @velocity[1] -= rand(8) - 4
+    @velocity = subject.velocity
+    @velocity /= rand(8) + 4
+    @velocity -= rand(8) - 4
   end
 
   def draw
@@ -35,7 +33,7 @@ class Projectil < Moveable
   end
 
   def is_dead?
-    return (@velocity[0].abs < @acceleration && @velocity[1].abs < @acceleration)
+    return (@velocity.abs < @acceleration && @velocity.abs < @acceleration)
   end
 
 end

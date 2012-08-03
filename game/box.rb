@@ -116,7 +116,7 @@ class Box
   end
 
   def colided?(box)
-    diboxion = [box.px, box.py, box.x - (@x-@px), box.y - (@y-@py)]
+    direction = [box.px, box.py, box.x - (@x-@px), box.y - (@y-@py)]
     left      = @px - @alf_width - box.alf_width
     right     = @px + @alf_width + box.alf_width
     top       = @py - @alf_height - box.alf_height

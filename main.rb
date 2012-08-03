@@ -9,28 +9,28 @@ include Glu
 
 require 'rubygame/sfont'
 
-require 'game'
-require 'game/gui'
-require 'game/vector'
-require 'game/box'
-require 'game/text'
-require 'game/moveable'
-require 'game/world'
-require 'game/map'
-require 'game/camera'
-require 'game/cursor'
-require 'game/smoke'
-require 'game/explosion'
-require 'game/quadtree'
-require 'game/shape'
-require 'game/shape/rectangle'
-require 'game/shape/triangle'
-require 'game/moveable/player'
-require 'game/moveable/enemy'
-require 'game/moveable/bullet'
-require 'game/moveable/puff'
-require 'game/moveable/projectil'
-require 'game/moveable/energy'
+require './game'
+require './game/gui'
+require './game/vector'
+require './game/box'
+require './game/text'
+require './game/moveable'
+require './game/world'
+require './game/map'
+require './game/camera'
+require './game/cursor'
+require './game/smoke'
+require './game/explosion'
+require './game/quadtree'
+require './game/shape'
+require './game/shape/rectangle'
+require './game/shape/triangle'
+require './game/moveable/player'
+require './game/moveable/enemy'
+require './game/moveable/bullet'
+require './game/moveable/puff'
+require './game/moveable/projectil'
+require './game/moveable/energy'
 
 include Rubygame
 include Rubygame::Events
@@ -72,9 +72,9 @@ class Main
       case event
         when KeyPressed
           case event.key
-            when :f      : puts $clock.framerate
-            when :q      : @running = false
-            when :escape : @running = false
+            when :f      then puts $clock.framerate
+            when :q      then @running = false
+            when :escape then @running = false
           end
           @active_keys.push event.key
         when KeyReleased

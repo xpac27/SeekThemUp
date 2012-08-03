@@ -43,13 +43,15 @@ class Player < Moveable
 
   def shoot
     return unless $clock.lifetime - @latest_shoot > 100
-    dx = $cursor.x - @x
-    dy = $cursor.y - @y
+    dx = $cursor.x - x
+    dy = $cursor.y - y
     mag = Math.sqrt(dx**2 + dy**2)
     dx = dx/mag
     dy = dy/mag
-    bullet = Bullet.new @x, @y, 5
-    bullet.translate dx, dy
+
+    bullet = Bullet.new x, y, 5
+    bullet.translate $cursor.x, $cursor.y
+
     @bullet_list += [bullet]
     @latest_shoot = $clock.lifetime
   end

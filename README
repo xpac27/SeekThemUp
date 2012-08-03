@@ -6,7 +6,7 @@ It's more a little experimentation than a real game project, but it might get fu
 HOW_TO_INSTALL?
 
 - install ruby game: http://rubygame.org/wiki/Installation_Instructions
-- install ruby-opengl: gem install ruby-opengl
+- install ruby-opengl: gem install ruby-opengl2
 - git-clone SeekThemUp using the read-only git url: git clone git://github.com/xpac27/SeekThemUp.git
 - reset to a stable revision (or stay on the bleeding edge): git reset --hard v0.1
 

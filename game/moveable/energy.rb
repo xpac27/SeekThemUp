@@ -14,7 +14,7 @@ class Energy < Moveable
     if not @locked
       @locked = true if distance_to(@subject) < 150
     else
-      translate(@subject.x - @x, @subject.y - @y)
+      translate(@subject.x, @subject.y)
     end
     super
   end

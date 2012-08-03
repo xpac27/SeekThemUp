@@ -2,7 +2,7 @@
 class Moveable
 
   attr_reader   :box
-  attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity, :direction
+  attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity
 
   def initialize x, y, size
     @size         = size
@@ -51,6 +51,11 @@ class Moveable
   end
 
   def translate(x, y)
+    @direction.x = x - @box.x;
+    @direction.y = y - @box.y;
+    @direction.normalize
+    @velocity = 1
+    @move = 1
   end
 
   def move_forward

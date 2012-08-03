@@ -20,11 +20,11 @@ class Game
   def handle_keys list
     list.each{|key|
       case key
-        when :mouse_left : @player.shoot
-        when :w          : @player.move_forward
-        when :s          : @player.move_backward
-        when :a          : @player.rotate_left
-        when :d          : @player.rotate_right
+        when :mouse_left then @player.shoot
+        when :w          then @player.move_forward
+        when :s          then @player.move_backward
+        when :a          then @player.rotate_left
+        when :d          then @player.rotate_right
       end
     }
   end
