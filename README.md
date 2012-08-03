@@ -1,9 +1,7 @@
 Seek Them UP!
 =============
 
-SeekThemUp is a Shoot them up game developed in Ruby using Rubygame and OpenGL.
-
-It's more a little experimentation than a real game project, but it might get fun to play ^^
+SeekThemUp is a Shoot them up game developed in Ruby using Rubygame and OpenGL. It's more a little experimentation than a real game project, but it might get fun to play ^^
 
 ![SeekThemUp Preview](https://github.com/xpac27/SeekThemUp/raw/master/design/seekThemUp_preview.png)
 
@@ -26,13 +24,14 @@ HOW TO PLAY?
 REVISION LIST
 -------------
 
-v0.1: core base done, the game is playable (current version)
-v0.2: weapon system done
-v0.3: advenced enemy behavior
-v0.4: better graphics
+* v0.1: core base done, the game is playable (current version)
+* v0.2: weapon system done
+* v0.3: advenced enemy behavior
+* v0.4: better graphics
 
 
 NOTES
+-----
 
 You might see strange outputs or outlines (they are trailing debugs or bugs).
 The game is far from being done but still ... you can test :)
