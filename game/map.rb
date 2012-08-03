@@ -59,12 +59,13 @@ class Map
 
   def generate_enemies x, y
     enemies  = []
-    get_difficulty(x, y).times {
+    d = get_difficulty(x, y)
+    d.times {
       position = get_random_position x, y
-      enemy              = Enemy.new(position[0], position[1], 8)
-      enemy.speed        = (rand(100) / 100.0) * 0.4 + 0.1
-      enemy.acceleration = (rand(100) / 100.0) * 0.02 + 0.015
-      enemy.friction     = (rand(100) / 100.0) * 0.01 + 0.002
+      enemy              = Enemy.new(position[0], position[1], 8 + d * 2)
+      enemy.speed        = (rand(100) / 100.0) * (0.40 * d) + 0.1
+      enemy.acceleration = (rand(100) / 100.0) * (0.02 * d) + 0.015
+      enemy.friction     = (rand(100) / 100.0) * (0.01 * d) + 0.002
       enemies << enemy
     }
     return enemies

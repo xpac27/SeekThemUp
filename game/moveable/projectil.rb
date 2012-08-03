@@ -7,10 +7,9 @@ class Projectil < Moveable
     @box.set_shape Rectangle.new
   end
 
-  def base_velocity_on subject
-    @velocity = subject.velocity
-    @velocity /= rand(8) + 4
-    @velocity -= rand(8) - 4
+  def update
+    move_forward
+    super
   end
 
   def draw
@@ -33,7 +32,7 @@ class Projectil < Moveable
   end
 
   def is_dead?
-    return (@velocity.abs < @acceleration && @velocity.abs < @acceleration)
+    return (@velocity.abs < @acceleration || @alpha < 0.05)
   end
 
 end

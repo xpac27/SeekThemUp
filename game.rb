@@ -67,10 +67,14 @@ class Game
     # Bullets against enemies
     @player.bullet_list.each {|bullet|
       @quadtree_enemy.hit(bullet.box).each {|enemy|
-        add Energy.new(enemy.x, enemy.y, @player)
         bullet.explode
-        remove enemy
         remove bullet
+        enemy.loose_energy
+        if enemy.is_dead?
+            remove enemy
+            add Energy.new(enemy.x, enemy.y, @player)
+            $camera.shake 3
+        end
         break
       }
     }

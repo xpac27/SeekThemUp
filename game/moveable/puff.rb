@@ -4,9 +4,9 @@ class Puff < Moveable
     super x, y, rand(size) + size/4.0
     @life         = life
     @age          = 0.0
-    @speed        = 20
-    @acceleration = 12
-    @friction     = 3
+    @speed        = 10
+    @acceleration = 0.1
+    @friction     = 0
     @box.set_shape Rectangle.new
   end
 
@@ -16,6 +16,7 @@ class Puff < Moveable
     @age += 1
     @size += 1
     @box.set_size(@size, @size)
+    move_backward
     super
   end
 

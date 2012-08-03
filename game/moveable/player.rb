@@ -42,16 +42,10 @@ class Player < Moveable
   end
 
   def shoot
-    return unless $clock.lifetime - @latest_shoot > 100
-    dx = $cursor.x - x
-    dy = $cursor.y - y
-    mag = Math.sqrt(dx**2 + dy**2)
-    dx = dx/mag
-    dy = dy/mag
-
+    return unless $clock.lifetime - @latest_shoot > 70
     bullet = Bullet.new x, y, 5
-    bullet.translate $cursor.x, $cursor.y
-
+    bullet.move_to $cursor.x, $cursor.y
+    bullet.rotate((rand(100) / 400.0) - 0.125)
     @bullet_list += [bullet]
     @latest_shoot = $clock.lifetime
   end
@@ -63,7 +57,7 @@ class Player < Moveable
 
   def loose_energy
     @energy -= 1
-    $explosion.generate self, 2, 2, :white
+    $explosion.generate self, 2, 2, :white, true
     $camera.shake 5
     $gui.set_info('energy', @energy)
   end

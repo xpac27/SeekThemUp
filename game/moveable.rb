@@ -2,7 +2,7 @@
 class Moveable
 
   attr_reader   :box
-  attr_accessor :speed, :acceleration, :friction, :x, :y, :size, :velocity
+  attr_accessor :speed, :acceleration, :friction, :direction, :x, :y, :size, :velocity
 
   def initialize x, y, size
     @size         = size
@@ -25,7 +25,7 @@ class Moveable
     @box.y = @box.y + @velocity * @direction.y
 
     if @move != 0
-      @velocity = @velocity + @acceleration * @move if @velocity < @speed
+      @velocity = @velocity + @acceleration * @move if @velocity < @speed && @velocity > -@speed
       @move = 0
     end
 
@@ -46,16 +46,20 @@ class Moveable
   end
 
   def rotate(angle)
-    @box.set_angle @direction.get_angle
     @direction.rotate(angle)
+    @box.set_angle(@direction.get_angle)
   end
 
-  def translate(x, y)
+  def set_angle(angle)
+    @direction.set_angle(angle)
+    @box.set_angle(@direction.get_angle)
+  end
+
+  def move_to(x, y)
     @direction.x = x - @box.x;
     @direction.y = y - @box.y;
     @direction.normalize
-    @velocity = 1
-    @move = 1
+    move_forward
   end
 
   def move_forward

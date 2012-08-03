@@ -23,8 +23,7 @@ class Smoke
 
   def generate subject, size, life, vx, vy
     puff = Puff.new subject.x, subject.y, size, life
-    puff.velocity = subject.velocity
-    puff.translate vx, vy
+    puff.direction = subject.direction.dup
     @puffs[@puffTotal] = puff
     @puffTotal += 1
   end

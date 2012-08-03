@@ -18,8 +18,8 @@ class Vector
   end
 
   def set_angle(a)
-    @x = Math.cosd(a)
-    @y = Math.sind(a)
+    @x = Math.cos(a)
+    @y = Math.sin(a)
   end
 
   def rotate(delta)
